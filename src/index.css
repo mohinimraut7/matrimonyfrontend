@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+@keyframes homecards-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-homecards {
+  animation: homecards-scroll 18s linear infinite;
+}
+
+

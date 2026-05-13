@@ -1,0 +1,21 @@
+export const CASTE_SUBCASTES = {
+  Brahmin: ["Iyer","Iyengar","Niyogi","Smartha","Saraswat","Kanyakubj","Maithil","Gaur","Deshastha","Chitpavan","Namboothiri","Other Brahmin"],
+  Kshatriya: ["Rajput","Maratha","Nair","Bhumihar","Jat","Yadav","Thakur","Other Kshatriya"],
+  Vaishya: ["Agarwal","Maheshwari","Oswal","Khandelwal","Gupta","Baniya","Marwari","Other Vaishya"],
+  Rajput: ["Sisodia","Chauhan","Rathore","Panwar","Kachwaha","Tomar","Bundela","Other Rajput"],
+  Maratha: ["Deshmukh","Patil","Bhonsle","Chavan","Jadhav","Shinde","Pawar","More","Other Maratha"],
+  Jat: ["Hindu Jat","Sikh Jat","Muslim Jat","Other Jat"],
+  Patel: ["Leva Patel","Kadva Patel","Anjana Patel","Patidar","Other Patel"],
+  Naidu: ["Kamma Naidu","Kapu Naidu","Balija Naidu","Gavara Naidu","Other Naidu"],
+  Nair: ["Kiriyathil Nair","Illam Nair","Swaroopathu Nair","Vilakkithala Nair","Other Nair"],
+  Iyer: ["Vadama","Brihacharanam","Vathima","Ashtasahasram","Other Iyer"],
+  Iyengar: ["Thenkalai","Vadakalai","Other Iyengar"],
+  Kayastha: ["Chitraguptavanshi","Bengali Kayastha","Mathur Kayastha","Srivastava","Other Kayastha"],
+  Sheikh: ["Sheikh Siddiqui","Sheikh Farooqui","Sheikh Ansari","Other Sheikh"],
+  Syed: ["Syed Naqvi","Syed Rizvi","Syed Zaidi","Other Syed"],
+  Ansari: ["Julaha Ansari","Momin Ansari","Other Ansari"],
+  "Scheduled Caste": ["Chamar","Mahar","Mang","Dhobi","Valmiki","Pasi","Balmiki","Other SC"],
+  "Scheduled Tribe": ["Gond","Bhil","Santali","Munda","Oraon","Meena","Other ST"],
+  "Other Backward Class": ["Kurmi","Koeri","Lodha","Teli","Mali","Kumhar","Lohar","Nai","Other OBC"],
+};
+

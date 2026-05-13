@@ -1,0 +1,761 @@
+{
+  "navbar": {
+    "name" :"Wedding Matrimony",
+    "home": "Home",
+    "about": "About us",
+    "matches": "Matches",
+    "login": "Login",
+    "signup": "Sign up",
+    "shortlist": "Shortlist",
+    "interest":"Interest",
+    "profile": "Profile"
+  },
+  "home": {
+    "tagline": "Trusted Matrimony Platform",
+    "title1": "Perfect Weddings",
+    "title2": "Happen Here.",
+    "description": "Find your life partner with a trusted and modern matrimony experience — curated, meaningful, and made for you.",
+    "cta": "Find Your Match →"
+  },
+  "profileBanner": {
+    "heading": "Get started — your profile is empty · ",
+    "subtext": "Complete your profile to get better matches.",
+    "cta": "Complete Profile →"
+  },
+  "homeCards": {
+    "sectionTag": "Simple & Secure",
+    "sectionTitle": "How It Works",
+    "sectionDesc": "Six easy steps to find the person you've been waiting for.",
+    "cards": [
+      {
+        "number": "01",
+        "title": "Create Your Profile",
+        "text": "Tell us about yourself — your background, values, and what you're looking for in a partner."
+      },
+      {
+        "number": "02",
+        "title": "Discover Matches",
+        "text": "Browse curated profiles filtered by location, religion, profession, and more."
+      },
+      {
+        "number": "03",
+        "title": "Connect & Meet",
+        "text": "Send a connect request and start a meaningful conversation with your match."
+      },
+      {
+        "number": "04",
+        "title": "Get Verified",
+        "text": "Complete a quick identity check to build trust and show matches you're genuinely who you say you are."
+      },
+      {
+        "number": "05",
+        "title": "Share Your Expectations",
+        "text": "Set your preferences for family values, lifestyle, and future goals so we can find truly compatible matches."
+      },
+      {
+        "number": "06",
+        "title": "Begin Your Journey",
+        "text": "Take the first step toward a lifelong bond — your perfect match could be just one conversation away."
+      }
+    ]
+  },
+  "kundaliSection": {
+  "tag": "Vedic Astrology",
+  "title1": "Check Your",
+  "title2": "Kundali Compatibility",
+  "description": "Our free Kundali Matching tool uses the traditional Vedic Ashtakoot system to analyse 8 key compatibility dimensions — from emotional bonding to health, temperament, and beyond.",
+  "cta": "Check Compatibility",
+  "badge": "36-point Gun Milan Score"
+  },
+
+  "review": {
+    "tag": "Real Stories",
+    "title": "Success Stories",
+    "desc": "Real couples who found their life partners with us.",
+    "verified": "Verified",
+
+    "list": [
+      {
+        "id": 1,
+        "name": "Amit & Priya",
+        "location": "Pune",
+        "photo": "https://imgs.search.brave.com/di2zHu3-cSS5Osm8MJjs1GFebJvVKnGlJ4MKfkeQ5Tg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9p/bmRpYW4tY291cGxl/LWNlbGVicmF0aW5n/LXByb3Bvc2UtZGF5/LWJ5LWJlaW5nLXJv/bWFudGljLXdpdGgt/ZWFjaC1vdGhlcl8y/My0yMTUxMTEwOTI0/LmpwZz9zZW10PWFp/c19oeWJyaWQmdz03/NDAmcT04MA",
+        "text": "We found each other through this platform. The experience was smooth and trustworthy. Highly recommended!"
+      },
+      {
+        "id": 2,
+        "name": "Rahul & Sneha",
+        "location": "Mumbai",
+        "photo": "https://imgs.search.brave.com/nnv-Rql470TpnWx_jtBysZtS_NYSSW8jplIBbGUnyAY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMzgv/ODA4Lzk0NS9zbWFs/bC9haS1nZW5lcmF0/ZWQtaGFwcHktYmVh/dXRpZnVsLWFuZC1p/bmRpYW4tY291cGxl/LXNtaWxpbmctbG9v/a2luZy1hdC1jYW1l/cmEtd2hpbGUtc3Rh/bmRpbmctYWdhaW5z/dC1ibHVycmVkLWlu/ZGlhbi1mcmVlLXBo/b3RvLmpwZWc",
+        "text": "Very easy to use and genuine profiles. We are thankful for this wonderful service."
+      },
+      {
+        "id": 3,
+        "name": "Kunal & Riya",
+        "location": "Nagpur",
+        "photo": "https://imgs.search.brave.com/4NJhAnGx4aarhbPTCjq76S9xwnnkaJ6XFOCo7ce4i7M/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjQv/NzUzLzk2Ni9zbWFs/bC9pbmRpYW4tY291/cGxlLWluLXRyYWRp/dGlvbmFsLWV0aG5p/Yy1jbG90aGVzLXRh/bGtpbmctZHVyaW5n/LWEtZmVzdGl2YWwt/b3Zlci1ib2tlaC1m/ZXN0aXZlLWJhY2tn/cm91bmQtcGhvdG8u/anBn",
+        "text": "A modern and simple matrimony website. Helped us find our perfect match."
+      },
+      {
+         "id": 4,
+        "name": "Arjun & Divya",
+        "location": "Hyderabad",
+        "photo": "https://plus.unsplash.com/premium_photo-1682090789715-a1acbfe72404?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwd2VkZGluZyUyMGNvdXBsZXxlbnwwfHwwfHx8MA%3D%3D",
+        "text": "Best matrimony platform we came across. Simple, trustworthy, and effective." 
+      },
+
+       {
+         "id": 5,
+        "name": "Rohan & Meera",
+        "location": "Delhi",
+        "photo": "https://c.pxhere.com/images/b0/17/23bf92434ec6f76f4b3b527be4fd-1598058.jpg!s2", 
+        "text": "The profiles were genuine and the process was very smooth. We got married last year!"
+      }      
+    ]
+  },
+    
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about finding your perfect match.",
+    "items": [
+      {
+        "q": "Is this matrimony platform free to use?",
+        "a": "Yes. You can create a profile, browse matches, and use basic features for free. Premium features unlock advanced filters and unlimited interactions."
+      },
+      {
+        "q": "How does Kundali matching work?",
+        "a": "We use the traditional Ashtakoot (36-point) Gun Milan system to evaluate compatibility based on moon sign, nakshatra, and doshas."
+      },
+      {
+        "q": "Is my personal information safe?",
+        "a": "Absolutely. Your data is encrypted and never shared without your consent. Privacy controls allow you to manage visibility at all times."
+      },
+      {
+        "q": "Do you verify profiles?",
+        "a": "We use multiple verification to reduce fake profiles."
+      }
+    ]
+  },
+  "footer": {
+    "brand": "Wedding Matrimony",
+    "tagline": "Find your perfect life partner with trust, privacy, and the blessings of tradition.",
+    "quickLinks": "Quick Links",
+    "company": "Company",
+    "followUs": "Follow Us",
+    "links": {
+      "home": "Home",
+      "browseMatches": "Browse Matches",
+      "shortlist": "Shortlist",
+      "interests": "Interests",
+      "kundali": "Kundali Matching",
+      "myProfile": "My Profile",
+      "login": "Login",
+      "register": "Register",
+      "about": "About Us",
+      "contact": "Contact",
+      "website": "Website",
+      "facebook": "Facebook",
+      "instagram": "Instagram"
+    },
+    "copyright": "© 2026 Wedding Matrimony",
+    "Developed_by":"Developed by Saavi Infinet Pvt Ltd"
+  },
+  "about": {
+    "tag": "Trusted Matrimony Platform",
+    "title": "About",
+    "titleHighlight": "Us",
+    "subtitle": "A platform built on trust, values, and the belief that every person deserves a meaningful, lasting partnership.",
+    "stats": [
+      {
+        "num": "2M+",
+        "lbl": "Registered Members"
+      },
+      {
+        "num": "500K+",
+        "lbl": "Successful Matches"
+      },
+      {
+        "num": "98%",
+        "lbl": "Satisfaction Rate"
+      },
+      {
+        "num": "15+",
+        "lbl": "Years of Trust"
+      }
+    ],
+    "storyTag": "Our Story",
+    "storyTitle": "Built with purpose, driven by trust",
+    "storyDesc": "Everything we do is in service of helping people find their forever partner in a safe, respectful, and joyful way.",
+    "cards": [
+      {
+        "title": "Who We Are",
+        "body": "Wedding Matrimony is a simple and user-friendly platform created to help individuals find meaningful and trustworthy relationships. Our goal is to provide a safe and comfortable experience for users who are looking for their life partner."
+      },
+      {
+        "title": "Our Mission",
+        "body": "Our mission is to make the partner-search journey easy, transparent, and secure. We focus on providing a clean experience where users can create profiles, explore suitable matches, and connect with confidence."
+      },
+      {
+        "title": "Our Values",
+        "body": "Respect, authenticity, and privacy are at the heart of everything we build. We believe every individual deserves dignity in their search for a partner — and we protect that always."
+      }
+    ],
+    "advantagesTag": "Our Advantages",
+    "advantagesTitle": "Why Choose Us",
+    "advantagesDesc": "We've spent years refining an experience that puts your wellbeing and success first.",
+    "advantages": [
+      {
+        "title": "Verified Profiles",
+        "body": "We focus on genuine and trustworthy user profiles — so every connection you make is real."
+      },
+      {
+        "title": "Smart Matching",
+        "body": "Find matches based on your preferences, values, and compatibility — not just photos."
+      },
+      {
+        "title": "Safe & Secure",
+        "body": "Your data and privacy are always our priority. We never share your information without consent."
+      }
+    ]
+  },
+  "login": {
+    "tag": "Trusted Matrimony Platform",
+    "title": "Welcome",
+    "titleHighlight": "Back",
+    "subtitle": "Login to find your perfect match",
+    "usernameLabel": "User Name",
+    "usernamePlaceholder": "Enter your User name",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submitBtn": "Login ",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Register"
+  },
+  "register": {
+    "tag": "Trusted Matrimony Platform",
+    "title": "Create",
+    "titleHighlight": "Account",
+    "subtitle": "Join thousands finding their perfect match",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "First name",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "Last name",
+    "usernameLabel": "User Name",
+    "usernamePlaceholder": "Enter your User name",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "mobileLabel": "Mobile Number",
+    "mobilePlaceholder": "Enter mobile number",
+    "lookingForLabel": "Looking For",
+    "bride": "♀ Bride",
+    "groom": "♂ Groom",
+    "submitBtn": "Create Account ",
+    "alreadyRegistered": "Already registered?",
+    "loginLink": "Login"
+  },
+  "matches": {
+    "title": "New Members",
+    "subtitle": "Curated based on your preferences",
+    "searchPlaceholder": "Search...",
+    "filters": "Filters",
+    "reset": "Reset",
+    "matchesFound": "matches found",
+    "noMatches": "No matches found",
+    "noMatchesHint": "Try adjusting your filters",
+    "connect": "Connect",
+    "filterSections": {
+      "maritalStatus": "Marital Status",
+      "ageRange": "Age Range",
+      "to": "to",
+      "religion": "Religion",
+      "city": "City",
+      "profession": "Profession",
+      "workingStatus": "Working Status"
+    },
+    "sort": {
+      "newestFirst": "Newest First",
+      "ageLow": "Age: Low to High",
+      "ageHigh": "Age: High to Low"
+    }
+  },
+  "shortlist": {
+    "emptyTitle": "No Profiles Shortlisted",
+    "emptyDesc": "Browse matches and shortlist profiles you're interested in — they'll appear here.",
+    "browseBtn": "Browse Matches →",
+    "tag": "Your Selection",
+    "title": "Shortlisted Profiles",
+    "profileSaved": "profile saved",
+    "profilesSaved": "profiles saved",
+    "badge": "Shortlisted",
+    "viewBtn": "View",
+    "removeBtn": "Remove"
+  },
+  "interests": {
+    "emptyTitle": "No Interests Sent",
+    "emptyDesc": "Profiles you send interest to will appear here.",
+    "browseBtn": "Browse Matches →",
+    "tag": "Your Interests",
+    "title": "Interested Profiles",
+    "profile": "profile",
+    "profiles": "profiles",
+    "badge": "Interested",
+    "viewBtn": "View",
+    "removeBtn": "Remove"
+  },
+  "profile": {
+    "tag": "My Profile",
+    "editBtn": "Edit Profile",
+    "aboutTitle": "About Myself",
+    "aboutEmpty": "No bio added yet. Click Edit Profile to add one.",
+    "astroTitle": "Astrological Details",
+    "religionTitle": "Religion & Community",
+    "familyTitle": "Family Details",
+    "educationTitle": "Education & Profession",
+    "lifestyleTitle": "Lifestyle",
+    "partnerTitle": "Partner Preferences",
+    "photosTitle": "Photos",
+    "personalDetails": "Personal Details",
+    "contact": "Contact",
+    "labels": {
+      "religion": "Religion",
+      "community": "Community",
+      "maritalStatus": "Marital Status",
+      "rashi": "Rashi (Moon Sign)",
+      "nakshatra": "Nakshatra",
+      "gotra": "Gotra",
+      "manglik": "Manglik Status",
+      "birthCity": "Birth City",
+      "birthTime": "Time of Birth",
+      "caste": "Caste",
+      "subCaste": "Sub-Caste",
+      "casteNoBar": "Caste No Bar",
+      "religiousPractice": "Religious Practice",
+      "community2": "Community / Sect",
+      "fatherName": "Father's Name",
+      "motherName": "Mother's Name",
+      "siblings": "Siblings",
+      "familyType": "Family Type",
+      "familyValues": "Family Values",
+      "familyStatus": "Family Status",
+      "nativePlace": "Native Place",
+      "education": "Highest Qualification",
+      "workingAs": "Working As",
+      "diet": "Diet",
+      "smoking": "Smoking",
+      "drinking": "Drinking",
+      "fitness": "Fitness",
+      "vehicle": "Own Vehicle",
+      "property": "Own Property",
+      "hobbies": "Hobbies & Interests",
+      "languages": "Languages Known",
+      "ageRange": "Age Range",
+      "heightRange": "Height Range",
+      "partnerEducation": "Education",
+      "partnerIncome": "Income",
+      "partnerLocation": "Location",
+      "partnerDiet": "Diet",
+      "partnerManglik": "Manglik",
+      "idealPartner": "Ideal Partner",
+      "age": "Age",
+      "gender": "Gender",
+      "height": "Height",
+      "weight": "Weight",
+      "bodyType": "Body Type",
+      "complexion": "Complexion",
+      "profileFor": "Profile For",
+      "motherTongue": "Mother Tongue",
+      "nationality": "Nationality",
+      "location": "Location",
+      "mobile": "Mobile"
+    }
+  },
+  "loginModal": {
+    "title": "Login Required",
+    "desc": "Please login to view full profile details.",
+    "loginBtn": "Login",
+    "cancelBtn": "Cancel"
+  },
+  "lockOverlay": {
+    "title": "Unlock full profile",
+    "desc": "Send interest or upgrade to view complete details",
+    "unlockBtn": "Unlock Now"
+  },
+  "viewProfile": {
+    "backBtn": "Back to Matches",
+    "profileNotFound": "Profile not found",
+    "goBack": "← Go back",
+    "verified": "Verified",
+    "sendInterest": "Send Interest",
+    "interestSent": "Interest Sent ✓",
+    "chatNow": "💬 Chat Now",
+    "shortlist": "Shortlist",
+    "shortlisted": "Shortlisted ✓",
+    "unlockTitle": "Unlock Full Profile",
+    "unlockDesc": "Send interest to view complete professional, personal, and family details.",
+    "unlockBtn": "Unlock Details",
+    "aboutTitle": "About",
+    "preferencesTitle": "Preferences",
+    "professionalTitle": "Professional Details",
+    "educationTitle": "Education & Personal",
+    "familyTitle": "Family Details",
+    "labels": {
+      "profession": "Profession",
+      "jobRole": "Job Role",
+      "sector": "Sector",
+      "annualIncome": "Annual Income",
+      "workLocation": "Work Location",
+      "workType": "Work Type",
+      "education": "Education",
+      "personality": "Personality",
+      "interests": "Interests",
+      "hobbies": "Hobbies",
+      "likes": "Likes",
+      "dislikes": "Dislikes",
+      "fatherName": "Father's Name",
+      "motherName": "Mother's Name",
+      "siblings": "Siblings",
+      "familyType": "Family Type"
+    }
+  },
+
+  "profileCard": {
+  "viewProfile": "View Profile"
+  },
+
+  
+  "cp": {
+    "steps": {
+      "basic": "Basic Info",
+      "personal": "Personal",
+      "religion": "Religion",
+      "family": "Family",
+      "education": "Education",
+      "lifestyle": "Lifestyle",
+      "partner": "Partner Preferences",
+      "photos": "Photos"
+    },
+    "header": {
+      "tag": "Matrimony Profile",
+      "title": "Complete Your Profile",
+      "stepOf": "Step {{step}} of {{total}}"
+    },
+    "stepInfo": {
+      "1": "Let's start with your basic information",
+      "2": "Your location, birth details and astrological information",
+      "3": "Your religious and community background",
+      "4": "Tell us about your family",
+      "5": "Your education and career details",
+      "6": "Your lifestyle preferences and habits",
+      "7": "What are you looking for in a partner?",
+      "8": "Add photos to make your profile stand out"
+    },
+    "footer": {
+      "back": "← Back",
+      "next": "Next →",
+      "save": "✓ Save Profile"
+    },
+    "toast": {
+      "tag": "Matrimony Profile",
+      "title": "Profile Completed!",
+      "subtitle": "Your matrimony profile has been created successfully.",
+      "responses": "More Responses",
+      "complete": "Complete",
+      "verified": "Verified"
+    },
+   
+    "s1": {
+      "firstName": "First Name",
+      "firstNamePh": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePh": "Enter your last name",
+      "dob": "Date of Birth",
+      "gender": "Gender",
+      "maritalStatus": "Marital Status",
+      "profileFor": "Profile Created For",
+      "height": "Height",
+      "heightPh": "e.g. 5'7\"",
+      "weight": "Weight",
+      "weightPh": "e.g. 70 kg",
+      "bodyType": "Body Type",
+      "complexion": "Complexion",
+      "mobile": "Mobile Number",
+      "mobilePh": "+91 98765 43210",
+      "about": "About Yourself",
+      "aboutPh": "Write a short bio about yourself, your interests, and what you are looking for..."
+    },
+    "s2": {
+      "motherTongue": "Mother Tongue",
+      "nationality": "Nationality",
+      "country": "Country",
+      "currentState": "Current State",
+      "currentCity": "Current City",
+      "birthCity": "Birth City",
+      "birthTime": "Time of Birth",
+      "rashi": "Rashi (Moon Sign)",
+      "nakshatra": "Nakshatra",
+      "gotra": "Gotra",
+      "manglik": "Manglik Status",
+      "currentStatePh": "e.g. Maharashtra",
+      "currentCityPh": "e.g. Mumbai",
+      "birthCityPh": "City of birth",
+      "gotraPh": "e.g. Kashyap, Bharadwaj"
+    },
+    "s3": {
+      "religion": "Religion",
+      "caste": "Caste",
+      "subCaste": "Sub-Caste",
+      "casteNoBar": "Caste No Bar?",
+      "religiousPractice": "Religious Practice",
+      "community": "Community / Sect",
+      "subCastePh": "Enter sub-caste (optional)",
+      "communityPh": "e.g. Sunni, Shaivite, Arya Samaj"
+    },
+    "s4": {
+      "fatherName": "Father's Name",
+      "fatherOccupation": "Father's Occupation",
+      "motherName": "Mother's Name",
+      "motherOccupation": "Mother's Occupation",
+      "brothers": "No. of Brothers",
+      "brothersMarried": "Brothers Married",
+      "sisters": "No. of Sisters",
+      "sistersMarried": "Sisters Married",
+      "familyType": "Family Type",
+      "familyValues": "Family Values",
+      "familyStatus": "Family Status",
+      "familyLocation": "Family Location / Native Place",
+      "fatherNamePh": "Father's full name",
+      "motherNamePh": "Mother's full name",
+      "familyLocationPh": "e.g. Pune, Maharashtra"
+    },
+    "s5": {
+      "education": "Highest Education",
+      "fieldOfStudy": "Field of Study",
+      "college": "College / University",
+      "employmentType": "Employment Type",
+      "occupation": "Occupation",
+      "company": "Company / Organisation",
+      "income": "Annual Income",
+      "workLocation": "Work Location",
+      "fieldOfStudyPh": "e.g. Computer Science, Commerce",
+      "collegePh": "Name of institution",
+      "occupationPh": "e.g. Software Engineer, Doctor",
+      "companyPh": "Where do you work?",
+      "workLocationPh": "City where you work"
+    },
+    "s6": {
+      "diet": "Diet",
+      "smoking": "Smoking",
+      "drinking": "Drinking",
+      "fitness": "Fitness Level",
+      "languages": "Languages Known",
+      "hobbies": "Hobbies & Interests",
+      "vehicle": "Own Vehicle?",
+      "property": "Own Property?"
+    },
+    "s7": {
+      "partnerAgeMin": "Partner Min Age",
+      "partnerAgeMax": "Partner Max Age",
+      "partnerHeightMin": "Partner Min Height",
+      "partnerHeightMax": "Partner Max Height",
+      "partnerMaritalStatus": "Preferred Marital Status",
+      "partnerReligion": "Preferred Religion",
+      "partnerCaste": "Preferred Caste",
+      "partnerEducation": "Preferred Education",
+      "partnerIncome": "Preferred Income",
+      "partnerLocation": "Preferred Location",
+      "partnerDiet": "Partner Diet Preference",
+      "partnerManglik": "Manglik Preference",
+      "partnerDesc": "Partner Description",
+      "partnerHeightMinPh": "e.g. 5'2\"",
+      "partnerHeightMaxPh": "e.g. 5'8\"",
+      "partnerDescPh": "Describe your ideal partner in your own words..."
+       },
+
+     "s8": {
+    "profilePhoto": "Profile Photo",
+    "photoDesc": "Upload a clear photo of yourself. This appears on your profile and in search results.",
+    "changePhoto": "Change Photo",
+    "uploadPhoto": "+ Upload Photo",
+
+    "idVerification": "ID Verification",
+    "idDesc": "Upload a government-issued ID to get a ✓ Verified badge on your profile.",
+
+    "documents": {
+      "aadhaar": "Aadhaar Card",
+      "aadhaarHint": "12-digit Aadhaar number",
+
+      "pan": "PAN Card",
+      "panHint": "10-character PAN",
+
+      "passport": "Passport",
+      "passportHint": "Valid passport copy",
+
+      "dl": "Driving Licence",
+      "dlHint": "Front side of DL"
+    },
+
+    "selectDoc": "Please select a document type first",
+
+    "uploadTitle": "Upload your ID document",
+    "uploadHint": "JPG, PNG or PDF · Max 5 MB · Securely encrypted",
+    "browse": "Browse",
+
+    "verifying": "Verifying…",
+    "verified": "Verified",
+    "verifiedMsg": "Identity verified! Your profile will show a ✓ Verified badge.",
+
+    "uploaded": "Document uploaded",
+
+    "privacyNote": "🔒 Your ID is encrypted and never shared with other users."
+  },
+    "options": {
+      "caste": [
+      "Brahmin","Kshatriya","Vaishya",
+      "Scheduled Caste","Scheduled Tribe","Other Backward Class",
+      "Kayastha","Rajput","Maratha","Jat","Patel",
+      "Naidu","Nair","Iyer","Iyengar",
+      "Sheikh","Syed","Ansari","Other"
+        ],
+
+      "religiousPractice": [
+        "Not Religious",
+        "Moderately Religious",
+        "Very Religious",
+        "Spiritual but not religious"
+        ],
+
+      "gender": ["Male","Female","Other"],
+      "maritalStatus": ["Never Married","Divorced","Widowed","Awaiting Divorce"],
+      "profileFor": ["Self","Son","Daughter","Brother","Sister","Relative","Friend"],
+      "bodyType": ["Slim","Average","Athletic","Heavy"],
+      "complexion": ["Very Fair","Fair","Wheatish","Wheatish Brown","Dark"],
+
+      "languages": [
+        "Hindi","English","Marathi","Tamil","Telugu","Kannada",
+        "Bengali","Gujarati","Punjabi","Malayalam","Odia","Urdu"
+      ],
+
+      "hobbies": [
+        "Reading","Cooking","Travelling","Music","Dancing","Yoga",
+        "Sports","Art","Photography","Gardening","Movies","Gaming",
+        "Fitness","Meditation"
+      ],
+      "fatherOccupation": [
+          "Business","Service / Job","Retired","Not Employed","Deceased","Other"
+        ],
+
+        "motherOccupation": [
+          "Homemaker","Business","Service / Job","Retired","Not Employed","Deceased","Other"
+        ],
+
+        "siblingsCount": ["0","1","2","3","4","5+"],
+
+      "motherTongue": ["Hindi","Marathi","Gujarati","Bengali","Tamil","Telugu","Kannada","Malayalam","Punjabi","Odia","Urdu","English","Other"],
+      "nationality": ["Indian","NRI","Foreign National"],
+      "country": ["India","USA","UK","Canada","Australia","UAE","Singapore","Germany","Other"],
+
+      "rashi": ["Mesh (Aries)","Vrishabh (Taurus)","Mithun (Gemini)","Kark (Cancer)","Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchik (Scorpio)","Dhanu (Sagittarius)","Makar (Capricorn)","Kumbh (Aquarius)","Meen (Pisces)"],
+
+      "nakshatra": ["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu","Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra","Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha","Shravana","Dhanishtha","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"],
+
+      "manglik": ["Manglik","Non-Manglik","Partial Manglik","Don't Know"],
+
+      "religion": ["Hindu","Muslim","Christian","Sikh","Buddhist","Jain","Parsi","Jewish","No Religion","Other"],
+
+      "casteNoBar": ["Yes, open to all castes","No, same caste preferred"],
+
+      "familyType": ["Nuclear","Joint","Extended"],
+      "familyValues": ["Traditional","Moderate","Liberal"],
+      "familyStatus": ["Middle Class","Upper Middle Class","Rich / Affluent","High Net Worth"],
+
+      "education": ["High School","Diploma","Bachelor's Degree","Master's Degree","MBA","MBBS / MD","PhD / Doctorate","CA / CS / CFA","Other"],
+
+      "employmentType": ["Private Sector","Government / PSU","Business / Self-Employed","Defence","Not Working","Student"],
+
+      "income": ["No Income","Below 2 Lakh","2–5 Lakh","5–10 Lakh","10–20 Lakh","20–30 Lakh","30–50 Lakh","50 Lakh – 1 Cr","Above 1 Cr"],
+
+      "diet": ["Vegetarian","Non-Vegetarian","Eggetarian","Vegan","Jain"],
+      "smoking": ["Non Smoker","Occasional","Regular"],
+      "drinking": ["Non Drinker","Occasional","Regular"],
+      "fitness": ["Very Active","Active","Moderately Active","Not Active"],
+
+      "vehicle": ["No","Two Wheeler","Car","Both"],
+      "property": ["No","Flat / Apartment","Independent House","Plot / Land","Multiple Properties"],
+
+      "partnerMaritalStatus": ["Never Married","Divorced","Widowed","Any"],
+      "partnerReligion": ["Hindu","Muslim","Christian","Sikh","Any","Other"],
+      "partnerCaste": ["Same Caste","Any Caste","Open to All"],
+      "partnerEducation": ["Any","Graduate & Above","Post Graduate & Above","Doctorate"],
+      "partnerIncome": ["No Preference","Above 2 Lakh","Above 5 Lakh","Above 10 Lakh","Above 20 Lakh"],
+      "partnerLocation": ["Same City","Same State","Anywhere in India","Abroad OK","Any"],
+      "partnerDiet": ["Vegetarian Only","Non-Veg OK","No Preference"],
+      "partnerManglik": ["Manglik Only","Non-Manglik Only","No Preference"]
+      
+    }
+  },
+
+  "common": {
+  "years": "years"
+  },
+
+  "data": {
+  "city": {
+    "Pune": "Pune",
+    "Mumbai": "Mumbai",
+    "Nagpur": "Nagpur",
+    "Bangalore": "Bangalore"
+  },
+  "religion": {
+    "Hindu": "Hindu",
+    "Muslim": "Muslim",
+    "Christian": "Christian",
+    "Sikh": "Sikh"
+  },
+  "profession": {
+    "Software Engineer": "Software Engineer",
+    "UI Designer": "UI Designer",
+    "HR Executive": "HR Executive",
+    "Marketing Manager": "Marketing Manager",
+    "Architect": "Architect"
+  },
+  "working": {
+    "Working": "Working",
+    "Not working": "Not working"
+  },
+  "maritalStatus": {
+    "Never Married": "Never Married",
+    "Divorced": "Divorced",
+    "Widowed": "Widowed"
+  }
+},
+"kundali": {
+  "title": "Kundali Matching",
+  "subtitle": "Check horoscope compatibility between bride and groom using the traditional Ashta-Koota system.",
+  "brideDetails": "Bride's Details",
+  "groomDetails": "Groom's Details",
+  "fullName": "Full Name",
+  "dob": "Date of Birth",
+  "tob": "Time of Birth",
+  "city": "City of Birth",
+  "rashi": "Rashi",
+  "nakshatra": "Nakshatra",
+  "manglik": "Manglik Status",
+  "calculate": "Calculate Match",
+  "matchType": "Ashta-Koota Milan",
+  "outOf": "out of 36",
+  "excellent": "Excellent Match",
+  "good": "Good Match",
+  "consider": "Needs Consideration",
+  "consultHint": "Score below 18 · Consult a Jyotishi for guidance",
+  "fullNamePh" :"Full Name",
+  "birthCityPh": "City of birth",
+  "rashiPh" :"Select Rashi",
+  "nakshatraPh":"Select Nakshatra",
+  "manglikPh":"Select manglik"  
+}
+
+}
+  
+
