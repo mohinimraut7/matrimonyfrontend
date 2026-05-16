@@ -14,7 +14,7 @@ export default function MainLayout() {
   return (
     <>
       <ScrollToTop/>
-      <ScrollTopButton />
+      <ScrollTopButton/>
       <Navbar />
       <Outlet />
 

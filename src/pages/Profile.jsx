@@ -338,6 +338,10 @@ export default function Profile() {
                     { label: t("profile.labels.smoking"),       value: p.smoking },
                     { label: t("profile.labels.drinking"),      value: p.drinking },
                     { label: t("profile.labels.location"),      value: city || null },
+                    { label: "Date of Birth", value: p.dob ? new Date(p.dob).toLocaleDateString("en-IN") : null },
+                    { label: "Current City",  value: p.currentCity },
+                    { label: "Current State", value: p.currentState },
+                    { label: "Country",       value: p.country },
                   ]
                     .filter(({ value }) => value && String(value).trim() !== "")
                     .map(({ label, value }, i, arr) => (

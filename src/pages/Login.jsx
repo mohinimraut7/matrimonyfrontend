@@ -1,8 +1,8 @@
-
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import axiosInstance from "../services/axiosInstance"; // ✅ axios instance with baseURL from .env
+import axiosInstance from "../services/axiosInstance";
+import { useProfile } from "../context/ProfileContext";
 
 function Login() {
   const { t } = useTranslation();
@@ -13,16 +13,16 @@ function Login() {
   const [focused, setFocused] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // ✅ new
   const [formData, setFormData] = useState({
     userName: "",
     password: "",
   });
 
+  const { refetchProfile, setIsLoggedIn } = useProfile();
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -31,21 +31,20 @@ function Login() {
     setError("");
 
     try {
-      // ✅ axiosInstance — baseURL .env मधून (VITE_API_BASE_URL), Content-Type auto set होतो
       const res = await axiosInstance.post("/login", formData);
       const data = res.data;
 
-      // ✅ Save token + user info to localStorage
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userType", userType);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      console.log("Login successful:", data);
+      setIsLoggedIn(true);
+      await refetchProfile();
+      await new Promise(resolve => setTimeout(resolve, 0));
       navigate(redirectTo, { replace: true });
 
     } catch (err) {
-      // ✅ axios error — server message किंवा network error
       const message =
         err.response?.data?.message || "Network error. Please check your connection.";
       setError(message);
@@ -64,8 +63,7 @@ function Login() {
 
   return (
     <>
-
-      {/* Page — fixed background so it fills everything behind navbar too */}
+      {/* Background */}
       <div
         className="fixed inset-0 bg-cover bg-center"
         style={{
@@ -73,7 +71,6 @@ function Login() {
             "url('https://imgs.search.brave.com/vLSQbXzsQDHKlZrbNiK9Br-QT69MoTtDh6yk8gMOJC0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bGluYW5kamlyc2Eu/Y29tL3dwLWNvbnRlbnQvdXBsb2Fkcy8wMDA3LU1OLVBlbGljYW4tSGlsbC1TYW5nZWV0LVdlZGRpbmctUGhvdG9zLmpwZw')",
         }}
       >
-        {/* Overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -83,9 +80,8 @@ function Login() {
         />
       </div>
 
-      {/* Scrollable content layer on top */}
+      {/* Content */}
       <div className="mt-20 relative z-10 min-h-screen flex items-center justify-center p-10">
-        {/* Card */}
         <div className="w-full max-w-[420px] bg-white rounded-[20px] border border-[#ede8e1] shadow-[0_24px_64px_rgba(0,0,0,0.18)] overflow-hidden">
 
           {/* Card header */}
@@ -97,38 +93,26 @@ function Login() {
               className="text-[2rem] font-bold text-black tracking-tight leading-tight m-0 mb-1"
               style={{ fontFamily: "'Cormorant Garamond', serif" }}
             >
-              {t("login.title")} 
-              <span className="text-[#c2852a] italic"> {t("login.titleHighlight")}</span>            
+              {t("login.title")}
+              <span className="text-[#c2852a] italic"> {t("login.titleHighlight")}</span>
             </h2>
             <p className="text-[0.78rem] text-black/50 m-0">
               {t("login.subtitle")}
             </p>
-
-            {/* Ornament */}
             <div className="flex items-center justify-center gap-2.5 mt-5">
-              <div
-                className="h-px w-12"
-                style={{
-                  background: "linear-gradient(to right, transparent, rgba(232,201,138,0.5))",
-                }}
-              />
+              <div className="h-px w-12" style={{ background: "linear-gradient(to right, transparent, rgba(232,201,138,0.5))" }} />
               <div className="w-[5px] h-[5px] bg-[#c2852a] rotate-45 rounded-[1px]" />
-              <div
-                className="h-px w-12"
-                style={{
-                  background: "linear-gradient(to left, transparent, rgba(232,201,138,0.5))",
-                }}
-              />
+              <div className="h-px w-12" style={{ background: "linear-gradient(to left, transparent, rgba(232,201,138,0.5))" }} />
             </div>
           </div>
 
-          {/* Divider */}
           <div className="h-px bg-[#ede8e1]" />
 
-          {/* Form body */}
+          {/* Form */}
           <div className="px-8 pt-7 pb-8 bg-[#f9f7f4]">
             <form onSubmit={handleSubmit}>
 
+              {/* Username */}
               <div className="mb-4">
                 <label className="block text-[0.7rem] font-bold tracking-[0.07em] uppercase text-gray-500 mb-1.5">
                   {t("login.usernameLabel")}
@@ -145,30 +129,54 @@ function Login() {
                 />
               </div>
 
+              {/* Password with show/hide toggle */}
               <div className="mb-4">
                 <label className="block text-[0.7rem] font-bold tracking-[0.07em] uppercase text-gray-500 mb-1.5">
                   {t("login.passwordLabel")}
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder={t("login.passwordPlaceholder")}
-                  className={inputClass("password")}
-                  onFocus={() => setFocused("password")}
-                  onBlur={() => setFocused("")}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder={t("login.passwordPlaceholder")}
+                    className={inputClass("password")}
+                    onFocus={() => setFocused("password")}
+                    onBlur={() => setFocused("")}
+                  />
+                  {/* ✅ Toggle button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(prev => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c2852a] transition-colors"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      // Eye-off (hide password)
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                      </svg>
+                    ) : (
+                      // Eye (show password)
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
 
-              {/* ✅ Error Message */}
               {error && (
                 <p className="text-red-500 text-[0.78rem] text-center mb-3 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
                   {error}
                 </p>
               )}
 
-              {/* ✅ Submit Button with loading state */}
               <button
                 type="submit"
                 disabled={loading}

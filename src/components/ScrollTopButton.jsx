@@ -2,14 +2,35 @@ import { useEffect, useState } from "react";
 
 export default function ScrollTopButton() {
   const [show, setShow] = useState(false);
+  const [hideForModal, setHideForModal] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setShow(window.scrollY > 200);
     };
 
+    const checkModal = () => {
+     
+      const modalOpen = document.querySelector(".complete-profile-modal");
+      setHideForModal(!!modalOpen);
+    };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // observe DOM changes
+    const observer = new MutationObserver(checkModal);
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    checkModal();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -19,12 +40,12 @@ export default function ScrollTopButton() {
     });
   };
 
-  if (!show) return null;
+  if (!show || hideForModal) return null;
 
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-8 right-10 z-[999] bg-[#c2852a] text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:bg-[#a96d1f]"
+      className="fixed bottom-8 right-10 z-[40] bg-[#c2852a] text-white w-12 h-12 flex items-center justify-center rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:bg-[#a96d1f]"
     >
       ↑
     </button>

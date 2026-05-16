@@ -1,6 +1,6 @@
 {
   "navbar": {
-    "name" :"Wedding Matrimony",
+    "name" :"MAJHA JODIDAR",
     "home": "Home",
     "about": "About us",
     "matches": "Matches",
@@ -8,7 +8,8 @@
     "signup": "Sign up",
     "shortlist": "Shortlist",
     "interest":"Interest",
-    "profile": "Profile"
+    "profile": "Profile",
+    "logout":"Logout"
   },
   "home": {
     "tagline": "Trusted Matrimony Platform",
@@ -137,7 +138,7 @@
     ]
   },
   "footer": {
-    "brand": "Wedding Matrimony",
+    "brand": "MAJHA JODIDAR",
     "tagline": "Find your perfect life partner with trust, privacy, and the blessings of tradition.",
     "quickLinks": "Quick Links",
     "company": "Company",

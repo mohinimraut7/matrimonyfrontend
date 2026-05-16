@@ -52,6 +52,7 @@ export default function Home() {
       {showProfileModal && (
         <CompleteProfile onClose={() => setShowProfileModal(false)} />
       )}
+ 
 
       {/* ─── HERO ─── */}
       <div className="relative min-h-screen pt-16">

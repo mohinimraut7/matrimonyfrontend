@@ -80,51 +80,80 @@ const initData = {
 
 export function ProfileProvider({ children }) {
   const [profileData, setProfileData] = useState(initData);
-  const [profileLoading, setProfileLoading] = useState(true); // ✅ loading state
+  const [profileLoading, setProfileLoading] = useState(true);
 
-  // ✅ Auto-fetch profile on app load if user is logged in
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const storedUser = localStorage.getItem("user");
-        if (!storedUser) { setProfileLoading(false); return; }
+  // ✅ KEY FIX: Read token from localStorage IMMEDIATELY on first render
+  // This means isLoggedIn is true right away after login — no waiting for fetch
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
 
-        const { id } = JSON.parse(storedUser);
-        if (!id) { setProfileLoading(false); return; }
+  const fetchProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const storedUser = localStorage.getItem("user");
 
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/users/${id}/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (!res.ok) { setProfileLoading(false); return; }
-
-        const data = await res.json();
-        if (data.success && data.user) {
-          // ✅ Merge backend data into context — never lose any field
-          setProfileData(prev => ({ ...prev, ...data.user }));
-        }
-      } catch (err) {
-        console.error("Profile auto-fetch error:", err);
-      } finally {
+      // No token = not logged in
+      if (!token || !storedUser) {
+        setIsLoggedIn(false);
         setProfileLoading(false);
+        return;
       }
-    };
 
+      const { id } = JSON.parse(storedUser);
+      if (!id) {
+        setProfileLoading(false);
+        return;
+      }
+
+      setProfileLoading(true);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/users/${id}/profile`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (!res.ok) {
+        setProfileLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+      if (data.success && data.user) {
+        setProfileData(prev => ({ ...prev, ...data.user }));
+        setIsLoggedIn(true); // confirm logged in after successful fetch
+      }
+    } catch (err) {
+      console.error("Profile fetch error:", err);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  // Runs once on app mount
+  useEffect(() => {
     fetchProfile();
-  }, []); // runs once on mount
+  }, []);
 
-  // ✅ Always merges — never loses existing fields
+  // Always merges — never loses existing fields
   const saveProfile = (newData) => {
     setProfileData(prev => ({ ...prev, ...newData }));
   };
 
+  // ✅ Clears everything on logout
+  const resetProfile = () => {
+    setProfileData(initData);
+    setIsLoggedIn(false); // hides Login/Register immediately
+  };
+
   return (
-    <ProfileContext.Provider value={{ profileData, saveProfile, profileLoading }}>
+    <ProfileContext.Provider value={{
+      profileData,
+      saveProfile,
+      profileLoading,
+      resetProfile,
+      refetchProfile: fetchProfile,
+      isLoggedIn,
+      setIsLoggedIn,   
+    }}>
       {children}
     </ProfileContext.Provider>
   );
