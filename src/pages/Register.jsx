@@ -2,13 +2,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import axiosInstance from "../services/axiosInstance"; // ✅ add this
+import { Eye, EyeOff } from "lucide-react";
+import axiosInstance from "../services/axiosInstance";
+
+// ✅ add this
 function Register() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [focused, setFocused] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -187,16 +191,27 @@ navigate("/login");
                 <label className="block text-[0.7rem] font-bold tracking-[0.07em] uppercase text-gray-500 mb-1.5">
                   {t("register.passwordLabel")}
                 </label>
-                <input
-                  type="password"
-                  name="password"                 
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder={t("register.passwordPlaceholder")}
-                  className={inputClass("password")}
-                  onFocus={() => setFocused("password")}
-                  onBlur={() => setFocused("")}
-                />
+
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder={t("register.passwordPlaceholder")}
+                    className={`${inputClass("password")} pr-10`}
+                    onFocus={() => setFocused("password")}
+                    onBlur={() => setFocused("")}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#c2852a] transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="mb-4">

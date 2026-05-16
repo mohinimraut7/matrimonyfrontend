@@ -725,14 +725,17 @@ function ProfileCard({ profile: p, onView, connectLabel }) {
             <h3 onClick={onView} className="font-bold text-[1.75rem] text-[#1c1917] cursor-pointer leading-tight m-0 tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
               {p.name}
             </h3>
-            <p className="text-[#686f7c] text-[0.71rem] mt-0.5 font-normal">{p.age} yrs · {p.height}</p>
+              <p className="text-[#686f7c] text-[0.71rem] mt-0.5 font-normal">
+                {p.age ? `${p.age} yrs` : "Age not specified"}
+                {p.height ? ` · ${p.height}` : ""}
+              </p>          
           </div>
         </div>
         <div className="flex flex-col gap-1.5 mb-3">
           {[
-            { icon: <MapPin size={15} />,    text: `${t(`data.city.${p.city}`)}, ${p.country}` },
-            { icon: <Briefcase size={15} />, text: t(`data.profession.${p.profession}`) },
-            { icon: <BookOpen size={15} />,  text: `${t(`data.religion.${p.religion}`)} · ${p.caste}` },
+            { icon: <MapPin size={15} />,    text: `${p.city || "City not specified"} ${p.country || ""}` },
+            { icon: <Briefcase size={15} />, text: p.profession || "Not specified" },          
+            { icon: <BookOpen size={15} />,  text: `${p.religion || "Religion not specified"} ${p.caste ? `· ${p.caste}` : ""}` },
           ].map(({ icon, text }, i) => (
             <div key={i} className="flex items-center gap-1.5 text-gray-500 text-[0.74rem]">
               <span className="text-[#c2852a] flex-shrink-0">{icon}</span>
