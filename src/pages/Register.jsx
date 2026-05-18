@@ -55,8 +55,8 @@ function Register() {
       // navigate("/login");
 
       const res = await axiosInstance.post("/register", formData);
-console.log("Registered successfully:", res.data);
-navigate("/login");
+      console.log("Registered successfully:", res.data);
+      navigate("/login");
 
     } catch (err) {
       const message=err.response?.data?.message || "Registration failed. Please try again.";

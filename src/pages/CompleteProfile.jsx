@@ -1192,16 +1192,62 @@ function Step1({ d, set, t }) {
           options={profileForOptions} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5">
-        <Input label={t("cp.s1.height")} placeholder={t("cp.s1.heightPh")} value={d.height} onChange={e => set("height", e.target.value)} />
-        <Input label={t("cp.s1.weight")} placeholder={t("cp.s1.weightPh")} value={d.weight} onChange={e => set("weight", e.target.value)} />
+        <Input
+          label={t("cp.s1.height")}
+          placeholder="5'9"
+          value={d.height}
+          onChange={e => {
+            let value = e.target.value.replace(/[^\d]/g, "");
+
+            // Auto format like 5'9
+            if (value.length >= 2) {
+              value = `${value[0]}'${value.slice(1, 2)}`;
+            }
+
+            set("height", value);
+          }}
+          maxLength={3}
+        />
+
+        <Input
+          label={t("cp.s1.weight")}
+          placeholder="65 kg"
+          value={d.weight}
+          onChange={e => {
+            // keep only numbers
+            let raw = e.target.value.replace(/[^\d]/g, "");
+
+            // if empty -> completely empty
+            if (!raw) {
+              set("weight", "");
+              return;
+            }
+
+            // otherwise add kg
+            set("weight", `${raw} kg`);
+          }}
+        />
+
         <Select label={t("cp.s1.bodyType")} value={d.bodyType} onChange={e => set("bodyType", e.target.value)}
           options={bodyTypeOptions} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Select label={t("cp.s1.complexion")} value={d.complexion} onChange={e => set("complexion", e.target.value)}
           options={complexionOptions} />
-        <Input label={t("cp.s1.mobile")} required type="tel" placeholder={t("cp.s1.mobilePh")} value={d.mobile} onChange={e => set("mobile", e.target.value)} />
-      </div>
+          
+        <Input
+          label={t("cp.s1.mobile")}
+          required
+          type="tel"
+          placeholder={t("cp.s1.mobilePh")}
+          value={d.mobile}
+          onChange={e => {
+            // allow only digits & max 10
+            const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+            set("mobile", value);
+          }}
+        /> 
+        </div>
       <Textarea label={t("cp.s1.about")} required placeholder={t("cp.s1.aboutPh")} value={d.about} onChange={e => set("about", e.target.value)} rows={4} />
     </div>
   );

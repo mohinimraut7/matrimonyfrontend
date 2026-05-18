@@ -430,7 +430,9 @@ export default function ViewProfile() {
         setProfile({
           // Basic
           id:              u._id,
-          name:            u.fullName || u.userName,
+          name: (u.firstName && u.lastName)
+            ? `${u.firstName.charAt(0).toUpperCase() + u.firstName.slice(1).toLowerCase()} ${u.lastName.charAt(0).toUpperCase() + u.lastName.slice(1).toLowerCase()}`
+            : u.fullName || u.userName,          
           age:             u.dob ? Math.floor((new Date() - new Date(u.dob)) / 31557600000) : null,
           dob:             u.dob ? new Date(u.dob).toLocaleDateString("en-IN") : "",
           height:          u.height || "",
@@ -524,7 +526,7 @@ export default function ViewProfile() {
       <div className="min-h-screen flex items-center justify-center bg-[#f9f7f4]">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-[#c2852a] border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-400 text-sm">Loading profile...</p>
+          <p className="text-gray-400 text-sm">{t("viewProfile.loading")}</p>
         </div>
       </div>
     );
@@ -534,10 +536,10 @@ export default function ViewProfile() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f9f7f4]">
         <div className="text-center">
-          <p className="text-gray-500">Profile not found.</p>
+          <p className="text-gray-500">{t("viewProfile.profileNotFound")}</p>
           <button onClick={() => navigate(-1)}
             className="mt-4 text-[#c2852a] bg-transparent border-none cursor-pointer text-[0.85rem]">
-            ← Go Back
+            ← {t("viewProfile.goBack")}
           </button>
         </div>
       </div>
@@ -551,7 +553,7 @@ export default function ViewProfile() {
         {/* Back button */}
         <button onClick={() => navigate(-1)}
           className="inline-flex items-center gap-1.5 mb-6 text-gray-500 text-[0.8rem] font-medium bg-white border border-[#ede8e1] rounded-lg px-3.5 py-1.5 cursor-pointer hover:text-[#c2852a] hover:border-[#e8c98a] transition-colors">
-          <ArrowLeft size={13} /> Back
+          <ArrowLeft size={13} /> {t("viewProfile.backBtn")}
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
@@ -570,7 +572,7 @@ export default function ViewProfile() {
                   style={{ background: "linear-gradient(to top, rgba(28,25,23,0.28) 0%, transparent 50%)" }} />
                 <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.65rem] font-semibold bg-white/90 text-[#1c1917] border border-[#ede8e1] backdrop-blur-sm">
                   <CheckCircle size={16} className="text-blue-500" fill="currentColor" stroke="white" strokeWidth={3} />
-                  Verified
+                  {t("viewProfile.verified")}
                 </div>
               </div>
 
@@ -622,8 +624,13 @@ export default function ViewProfile() {
                   }`}>
                   <Heart size={13} fill={hasSentInterest(profile.id) ? "none" : "white"}
                     className={hasSentInterest(profile.id) ? "text-green-600" : ""} />
-                  {hasSentInterest(profile.id) ? "Interest Sent" : "Send Interest"}
-                </button>
+                    {
+                      hasSentInterest(profile.id)
+                        ? t("viewProfile.interestSent")
+                        : t("viewProfile.sendInterest")
+                    }                
+                  </button>
+
                 <button
                   onClick={() => addToShortlist(profile)}
                   className={`w-full py-2.5 rounded-xl text-[0.82rem] font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
@@ -633,8 +640,12 @@ export default function ViewProfile() {
                   }`}>
                   <Star size={12} fill={isShortlisted(profile.id) ? "#c2852a" : "none"}
                     stroke={isShortlisted(profile.id) ? "#c2852a" : "currentColor"} />
-                  {isShortlisted(profile.id) ? "Shortlisted" : "Shortlist"}
-                </button>
+                    {
+                      isShortlisted(profile.id)
+                        ? t("viewProfile.shortlisted")
+                        : t("viewProfile.shortlist")
+                    }                
+               </button>
               </div>
             </div>
           </div>
@@ -644,89 +655,89 @@ export default function ViewProfile() {
 
             {/* About */}
             {profile.about && (
-              <SectionCard icon={<User size={14} />} title="About">
+              <SectionCard icon={<User size={14} />} title={t("viewProfile.aboutTitle")}>
                 <p className="text-gray-500 text-[0.87rem] leading-[1.75] m-0">{profile.about}</p>
               </SectionCard>
             )}
 
             {/* Basic Details */}
-            <SectionCard icon={<User size={14} />} title="Basic Details">
+            <SectionCard icon={<User size={14} />} title={t("viewProfile.basicDetailsTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Date of Birth"    value={profile.dob} />
-                <DetailItem label="Height"           value={profile.height} />
-                <DetailItem label="Weight"           value={profile.weight} />
-                <DetailItem label="Body Type"        value={profile.bodyType} />
-                <DetailItem label="Complexion"       value={profile.complexion} />
-                <DetailItem label="Marital Status"   value={profile.maritalStatus} />
-                <DetailItem label="Profile For"      value={profile.profileFor} />
-                <DetailItem label="Mother Tongue"    value={profile.motherTongue} />
-                <DetailItem label="Nationality"      value={profile.nationality} />
-                <DetailItem label="Mobile"         value={profile.mobile} />  {/* ✅ add */}
-                <DetailItem label="Current City"    value={profile.city} />         {/* ✅ */}
-                <DetailItem label="Current State"   value={profile.currentState} /> {/* ✅ */}
-                <DetailItem label="Country"         value={profile.country} />      {/* ✅ */}
+              <DetailItem label={t("viewProfile.labels.dob")}           value={profile.dob} />
+              <DetailItem label={t("viewProfile.labels.height")}        value={profile.height} />
+              <DetailItem label={t("viewProfile.labels.weight")}        value={profile.weight} />
+              <DetailItem label={t("viewProfile.labels.bodyType")}      value={profile.bodyType} />
+              <DetailItem label={t("viewProfile.labels.complexion")}    value={profile.complexion} />
+              <DetailItem label={t("viewProfile.labels.maritalStatus")} value={profile.maritalStatus} />
+              <DetailItem label={t("viewProfile.labels.profileFor")}    value={profile.profileFor} />
+              <DetailItem label={t("viewProfile.labels.motherTongue")}  value={profile.motherTongue} />
+              <DetailItem label={t("viewProfile.labels.nationality")}   value={profile.nationality} />
+              <DetailItem label={t("viewProfile.labels.mobile")}        value={profile.mobile} />
+              <DetailItem label={t("viewProfile.labels.city")}          value={profile.city} />
+              <DetailItem label={t("viewProfile.labels.currentState")}  value={profile.currentState} />
+              <DetailItem label={t("viewProfile.labels.country")}       value={profile.country} />          
               </div>
             </SectionCard>
 
             {/* Astrology */}
             {(profile.rashi || profile.nakshatra || profile.gotra || profile.manglik) && (
-              <SectionCard icon={<span className="text-sm">🔯</span>} title="Astrology">
+              <SectionCard icon={<span className="text-sm">🔯</span>} title={t("viewProfile.astrologyTitle")}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                  <DetailItem label="Birth City"  value={profile.birthCity} />
-                  <DetailItem label="Birth Time"  value={profile.birthTime} />
-                  <DetailItem label="Rashi"       value={profile.rashi} />
-                  <DetailItem label="Nakshatra"   value={profile.nakshatra} />
-                  <DetailItem label="Gotra"       value={profile.gotra} />
-                  <DetailItem label="Manglik"     value={profile.manglik} />
+                <DetailItem label={t("viewProfile.labels.birthCity")}  value={profile.birthCity} />
+                <DetailItem label={t("viewProfile.labels.birthTime")}  value={profile.birthTime} />
+                <DetailItem label={t("viewProfile.labels.rashi")}      value={profile.rashi} />
+                <DetailItem label={t("viewProfile.labels.nakshatra")}  value={profile.nakshatra} />
+                <DetailItem label={t("viewProfile.labels.gotra")}      value={profile.gotra} />
+                <DetailItem label={t("viewProfile.labels.manglik")}    value={profile.manglik} />
                 </div>
               </SectionCard>
             )}
 
             {/* Religion */}
-            <SectionCard icon={<span className="text-sm">🕌</span>} title="Religion & Community">
+            <SectionCard icon={<span className="text-sm">🕌</span>} title={t("viewProfile.religionTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Religion"            value={profile.religion} />
-                <DetailItem label="Caste"               value={profile.caste} />
-                <DetailItem label="Sub Caste"           value={profile.subCaste} />
-                <DetailItem label="Caste No Bar"        value={profile.casteNoBar} />
-                <DetailItem label="Religious Practice"  value={profile.religiousPractice} />
-                <DetailItem label="Community"           value={profile.community} />
+                <DetailItem label={t("viewProfile.labels.religion")}           value={profile.religion} />
+                <DetailItem label={t("viewProfile.labels.caste")}              value={profile.caste} />
+                <DetailItem label={t("viewProfile.labels.subCaste")}           value={profile.subCaste} />
+                <DetailItem label={t("viewProfile.labels.casteNoBar")}         value={profile.casteNoBar} />
+                <DetailItem label={t("viewProfile.labels.religiousPractice")}  value={profile.religiousPractice} />
+                <DetailItem label={t("viewProfile.labels.community")}          value={profile.community} />
               </div>
             </SectionCard>
 
             {/* Professional */}
-            <SectionCard icon={<Briefcase size={14} />} title="Professional Details">
+            <SectionCard icon={<Briefcase size={14} />} title={t("viewProfile.professionalTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Occupation"       value={profile.occupation} />
-                <DetailItem label="Employment Type"  value={profile.employmentType} />
-                <DetailItem label="Company"          value={profile.company} />
-                <DetailItem label="Annual Income"    value={profile.income} />
-                <DetailItem label="Work Location"    value={profile.workLocation} />
+                <DetailItem label={t("viewProfile.labels.occupation")}      value={profile.occupation} />
+                <DetailItem label={t("viewProfile.labels.employmentType")}  value={profile.employmentType} />
+                <DetailItem label={t("viewProfile.labels.company")}         value={profile.company} />
+                <DetailItem label={t("viewProfile.labels.annualIncome")}    value={profile.income} />
+                <DetailItem label={t("viewProfile.labels.workLocation")}    value={profile.workLocation} />
               </div>
             </SectionCard>
 
             {/* Education */}
-            <SectionCard icon={<GraduationCap size={14} />} title="Education">
+            <SectionCard icon={<GraduationCap size={14} />} title={t("viewProfile.educationTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Education"      value={profile.education} />
-                <DetailItem label="Field of Study" value={profile.fieldOfStudy} />
-                <DetailItem label="College"        value={profile.college} />
+                <DetailItem label={t("viewProfile.labels.education")}    value={profile.education} />
+                <DetailItem label={t("viewProfile.labels.fieldOfStudy")} value={profile.fieldOfStudy} />
+                <DetailItem label={t("viewProfile.labels.college")}      value={profile.college} />
               </div>
             </SectionCard>
 
             {/* Lifestyle */}
-            <SectionCard icon={<Leaf size={14} />} title="Lifestyle">
+            <SectionCard icon={<Leaf size={14} />} title={t("viewProfile.lifestyleTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Diet"      value={profile.diet} />
-                <DetailItem label="Smoking"   value={profile.smoking} />
-                <DetailItem label="Drinking"  value={profile.drinking} />
-                <DetailItem label="Fitness"   value={profile.fitness} />
-                <DetailItem label="Vehicle"   value={profile.vehicle} />
-                <DetailItem label="Property"  value={profile.property} />
+                <DetailItem label={t("viewProfile.labels.diet")}     value={profile.diet} />
+                <DetailItem label={t("viewProfile.labels.smoking")}  value={profile.smoking} />
+                <DetailItem label={t("viewProfile.labels.drinking")} value={profile.drinking} />
+                <DetailItem label={t("viewProfile.labels.fitness")}  value={profile.fitness} />
+                <DetailItem label={t("viewProfile.labels.vehicle")}  value={profile.vehicle} />
+                <DetailItem label={t("viewProfile.labels.property")} value={profile.property} />
               </div>
               {profile.hobbies && (
                 <div className="mt-3">
-                  <p className="text-[0.67rem] font-bold tracking-[0.06em] uppercase text-gray-400 mb-2">Hobbies</p>
+                  <p className="text-[0.67rem] font-bold tracking-[0.06em] uppercase text-gray-400 mb-2">{t("viewProfile.labels.hobbies")}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {profile.hobbies.split(", ").map(h => (
                       <span key={h} className="px-3 py-1 rounded-full text-[0.72rem] font-medium bg-[#fdf3e3] text-[#c2852a] border border-[#e8c98a]">
@@ -738,7 +749,7 @@ export default function ViewProfile() {
               )}
               {profile.languages && (
                 <div className="mt-3">
-                  <p className="text-[0.67rem] font-bold tracking-[0.06em] uppercase text-gray-400 mb-2">Languages</p>
+                  <p className="text-[0.67rem] font-bold tracking-[0.06em] uppercase text-gray-400 mb-2">{t("viewProfile.labels.languages")}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {profile.languages.split(", ").map(l => (
                       <span key={l} className="px-3 py-1 rounded-full text-[0.72rem] font-medium bg-blue-50 text-blue-600 border border-blue-200">
@@ -751,42 +762,42 @@ export default function ViewProfile() {
             </SectionCard>
 
             {/* Family */}
-            <SectionCard icon={<Users size={14} />} title="Family Details">
+            <SectionCard icon={<Users size={14} />} title={t("viewProfile.familyTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label="Father's Name"        value={profile.fatherName} />
-                <DetailItem label="Father's Occupation"  value={profile.fatherOccupation} />
-                <DetailItem label="Mother's Name"        value={profile.motherName} />
-                <DetailItem label="Mother's Occupation"  value={profile.motherOccupation} />
-                <DetailItem label="Brothers"             value={profile.brothers} />
-                <DetailItem label="Brothers Married"     value={profile.brothersMarried} />
-                <DetailItem label="Sisters"              value={profile.sisters} />
-                <DetailItem label="Sisters Married"      value={profile.sistersMarried} />
-                <DetailItem label="Family Type"          value={profile.familyType} />
-                <DetailItem label="Family Values"        value={profile.familyValues} />
-                <DetailItem label="Family Status"        value={profile.familyStatus} />
-                <DetailItem label="Family Location"      value={profile.familyLocation} />
+                <DetailItem label={t("viewProfile.labels.fatherName")}        value={profile.fatherName} />
+                <DetailItem label={t("viewProfile.labels.fatherOccupation")}  value={profile.fatherOccupation} />
+                <DetailItem label={t("viewProfile.labels.motherName")}        value={profile.motherName} />
+                <DetailItem label={t("viewProfile.labels.motherOccupation")}  value={profile.motherOccupation} />
+                <DetailItem label={t("viewProfile.labels.brothers")}          value={profile.brothers} />
+                <DetailItem label={t("viewProfile.labels.brothersMarried")}   value={profile.brothersMarried} />
+                <DetailItem label={t("viewProfile.labels.sisters")}           value={profile.sisters} />
+                <DetailItem label={t("viewProfile.labels.sistersMarried")}    value={profile.sistersMarried} />
+                <DetailItem label={t("viewProfile.labels.familyType")}        value={profile.familyType} />
+                <DetailItem label={t("viewProfile.labels.familyValues")}      value={profile.familyValues} />
+                <DetailItem label={t("viewProfile.labels.familyStatus")}      value={profile.familyStatus} />
+                <DetailItem label={t("viewProfile.labels.familyLocation")}    value={profile.familyLocation} />
               </div>
             </SectionCard>
 
             {/* Partner Preferences */}
             {(profile.partnerAgeMin || profile.partnerDesc) && (
-              <SectionCard icon={<Heart size={14} />} title="Partner Preferences">
+              <SectionCard icon={<Heart size={14} />} title={t("viewProfile.partnerTitle")}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                  <DetailItem label="Age Range"       value={profile.partnerAgeMin && profile.partnerAgeMax ? `${profile.partnerAgeMin} – ${profile.partnerAgeMax}` : ""} />
-                  <DetailItem label="Height Range"    value={profile.partnerHeightMin && profile.partnerHeightMax ? `${profile.partnerHeightMin} – ${profile.partnerHeightMax}` : ""} />
-                  <DetailItem label="Marital Status"  value={profile.partnerMaritalStatus} />
-                  <DetailItem label="Religion"        value={profile.partnerReligion} />
-                  <DetailItem label="Caste"           value={profile.partnerCaste} />
-                  <DetailItem label="Education"       value={profile.partnerEducation} />
-                  <DetailItem label="Income"          value={profile.partnerIncome} />
-                  <DetailItem label="Location"        value={profile.partnerLocation} />
-                  <DetailItem label="Diet"            value={profile.partnerDiet} />
-                  <DetailItem label="Manglik"         value={profile.partnerManglik} />
+                  <DetailItem label={t("viewProfile.labels.ageRange")}        value={profile.partnerAgeMin && profile.partnerAgeMax ? `${profile.partnerAgeMin} – ${profile.partnerAgeMax}` : ""} />
+                  <DetailItem label={t("viewProfile.labels.heightRange")}    value={profile.partnerHeightMin && profile.partnerHeightMax ? `${profile.partnerHeightMin} – ${profile.partnerHeightMax}` : ""} />
+                  <DetailItem label={t("viewProfile.labels.partnerMaritalStatus")} value={profile.partnerMaritalStatus} />
+                  <DetailItem label={t("viewProfile.labels.partnerReligion")}      value={profile.partnerReligion} />
+                  <DetailItem label={t("viewProfile.labels.partnerCaste")}         value={profile.partnerCaste} />
+                  <DetailItem label={t("viewProfile.labels.partnerEducation")}     value={profile.partnerEducation} />
+                  <DetailItem label={t("viewProfile.labels.partnerIncome")}        value={profile.partnerIncome} />
+                  <DetailItem label={t("viewProfile.labels.partnerLocation")}      value={profile.partnerLocation} />
+                  <DetailItem label={t("viewProfile.labels.partnerDiet")}          value={profile.partnerDiet} />
+                  <DetailItem label={t("viewProfile.labels.partnerManglik")}       value={profile.partnerManglik} />
                 </div>
                 {profile.partnerDesc && (
                   <div className="mt-4 pt-4 border-t border-[#f0ede9]">
                     <p className="text-[0.67rem] font-bold tracking-[0.06em] uppercase text-gray-400 mb-2">Description</p>
-                    <p className="text-gray-500 text-[0.87rem] leading-[1.75] m-0">{profile.partnerDesc}</p>
+                    <p className="text-gray-500 text-[0.87rem] leading-[1.75] m-0">{t("viewProfile.partnerDesc")}</p>
                   </div>
                 )}
               </SectionCard>

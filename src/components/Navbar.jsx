@@ -247,12 +247,34 @@ export default function Navbar() {
 
   return (
     <nav id="main-navbar" className="fixed top-0 left-0 w-full z-50 bg-white/50 backdrop-blur-md border-b border-white/40">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-black">
-          {t("navbar.name")}
-        </Link>
+        <Link
+        to="/"
+        className="flex flex-col leading-none select-none"
+      >
+        {/* Main Brand */}
+        <div
+          className="text-[1.8rem] md:text-[2.1rem] font-bold tracking-[0.08em] uppercase flex items-center"
+          style={{ fontFamily: "'Cormorant Garamond', serif" }}
+        >
+          <span className="text-[#1c1917]">
+            {t("navbar.brandFirst")}
+          </span>
+
+          <span className="mx-2 text-[#c2852a]"> </span>
+
+          <span className="text-[#c2852a]">
+            {t("navbar.brandSecond")}
+          </span>
+        </div>
+
+        {/* Tagline */}
+        <span className="text-[0.56rem] md:text-[0.62rem] tracking-[0.32em] uppercase text-black ml-[2px] mt-1 font-semibold">
+          {t("navbar.tagline")}
+        </span>
+      </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex gap-12 text-sm font-medium text-black">
@@ -397,3 +419,13 @@ export default function Navbar() {
     </nav>
   );
 }
+
+
+
+
+
+
+
+
+
+

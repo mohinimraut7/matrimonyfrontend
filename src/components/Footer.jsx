@@ -10,17 +10,39 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-5 gap-8">
 
         {/* Brand */}
-        <div className="md:col-span-2">
-          <h3
-            className="text-white font-semibold text-xl mb-3"
+       <div className="md:col-span-2">
+
+  {/* Brand */}
+          <div
+            className="text-[2rem] md:text-[2.2rem] font-bold tracking-[0.08em] uppercase flex items-center leading-none"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            {t("footer.brand")}
-          </h3>
-          <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-            {t("footer.tagline")}
+            <span className="text-white">
+              {t("footer.brandFirst")}
+            </span>
+
+            <span className="mx-2 text-[#c2852a]"> </span>
+
+            <span className="text-[#c2852a]">
+              {t("footer.brandSecond")}
+            </span>
+          </div>
+
+          {/* Tagline */}
+          <p className="mt-2 text-[0.68rem] tracking-[0.28em] uppercase text-gray-500 font-semibold">
+            {t("footer.brandTagline1")}
           </p>
-          <div className="mt-4 w-10 h-[2px]" style={{ background: "#c2852a" }} />
+
+          {/* Description */}
+          <p className="mt-5 text-sm text-gray-400 leading-relaxed max-w-sm">
+            {t("footer.tagline2")}
+          </p>
+
+          {/* Accent line */}
+          <div
+            className="mt-5 w-14 h-[2px] rounded-full"
+            style={{ background: "#c2852a" }}
+          />
         </div>
 
         {/* Quick Links */}

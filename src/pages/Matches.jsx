@@ -487,6 +487,17 @@ function SidebarContent({ t, maritalStatus, setMaritalStatus, minAge, setMinAge,
   );
 }
 
+function formatDisplayName(name) {
+  if (!name) return "";
+  // Split on camelCase e.g. "rohanRane" → "Rohan Rane"
+  const spaced = name.replace(/([a-z])([A-Z])/g, "$1 $2");
+  // Capitalize first letter of each word
+  return spaced
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 export default function Matches() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -523,37 +534,46 @@ export default function Matches() {
 
   const activeFilterCount = maritalStatus.length + religions.length + cities.length + professions.length + (workingFilter ? 1 : 0);
 
+
   // ✅ Fetch real users from API
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const res = await axiosInstance.get("/getUsers");
-        const users = res.data.users;
+ useEffect(() => {
+   const fetchUsers = async () => {
+  try {
+    setLoading(true);
+    const res = await axiosInstance.get("/getUsers");
+    const users = res.data.users;
 
-        const mapped = users.map(u => ({
-          id:            u._id,
-          name:          u.fullName || u.userName,
-          age:           u.dob ? Math.floor((new Date() - new Date(u.dob)) / 31557600000) : null,
-          height:        u.height || "",
-          photo:         u.photos?.[0] || null,
-          city:          u.currentCity || u.city || "",
-          country:       u.country || "",
-          profession:    u.occupation || u.profession || "",
-          religion:      u.religion || "",
-          caste:         u.caste || "",
-          maritalStatus: u.maritalStatus || "",
-          working:       u.employmentType ? "Working" : "Not working",
-        }));
+    // ✅ Get current logged-in user's ID from localStorage
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const currentUserId = currentUser?.id; 
 
-        setAllProfiles(mapped);
-        setResults(mapped);
-      } catch (err) {
-        console.error("Failed to fetch users:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const mapped = users
+      .filter(u => u._id !== currentUserId) // ✅ Exclude own profile
+      .map(u => ({
+        id:            u._id,
+        name: (u.firstName && u.lastName)
+        ? `${u.firstName.charAt(0).toUpperCase() + u.firstName.slice(1).toLowerCase()} ${u.lastName.charAt(0).toUpperCase() + u.lastName.slice(1).toLowerCase()}`
+        : u.fullName || u.userName,       
+        age:           u.dob ? Math.floor((new Date() - new Date(u.dob)) / 31557600000) : null,
+        height:        u.height || "",
+        photo:         u.photos?.[0] || null,
+        city:          u.currentCity || u.city || "",
+        country:       u.country || "",
+        profession:    u.occupation || u.profession || "",
+        religion:      u.religion || "",
+        caste:         u.caste || "",
+        maritalStatus: u.maritalStatus || "",
+        working:       u.employmentType ? "Working" : "Not working",
+      }));
+
+    setAllProfiles(mapped);
+    setResults(mapped);
+  } catch (err) {
+    console.error("Failed to fetch users:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchUsers();
   }, []);
