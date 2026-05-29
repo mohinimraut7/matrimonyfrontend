@@ -60,11 +60,10 @@ const ProfileContext = createContext();
 const initData = {
   firstName: "", lastName: "", dob: "", gender: "", maritalStatus: "", profileFor: "",
   height: "", weight: "", bodyType: "", complexion: "", mobile: "", about: "",
-  motherTongue: "", nationality: "", currentCity: "", currentState: "", country: "",
+  motherTongue: "", nationality: "", currentCity: "", currentState: "", country: "",district: "", taluka: "", pincode: "",
   birthCity: "", birthTime: "", rashi: "", nakshatra: "", gotra: "", manglik: "",
   religion: "", caste: "", subCaste: "", casteNoBar: "", religiousPractice: "", community: "",
-  fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "",
-  brothers: "", brothersMarried: "", sisters: "", sistersMarried: "",
+  fatherName: "", fatherOccupation: "",fatherDistrict: "", fatherTaluka: "", fatherVillage: "", fatherRelativeSurname: "", motherName: "", motherOccupation: "", motherDistrict: "",motherTaluka: "",motherVillage: "", motherRelativeSurname: "", 
   familyType: "", familyValues: "", familyStatus: "", familyLocation: "",
   education: "", fieldOfStudy: "", college: "",
   employmentType: "", occupation: "", company: "", income: "", workLocation: "",
@@ -74,7 +73,7 @@ const initData = {
   partnerHeightMin: "", partnerHeightMax: "",
   partnerMaritalStatus: "", partnerReligion: "", partnerCaste: "",
   partnerEducation: "", partnerIncome: "", partnerLocation: "",
-  partnerDiet: "", partnerManglik: "", partnerDesc: "",
+  partnerDiet: "", partnerManglik: "", partnerDesc: "", preferredSurname: "",
   photos: [], idDoc: "",
 };
 

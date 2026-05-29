@@ -451,6 +451,9 @@ export default function ViewProfile() {
           country:         u.country || "",
           motherTongue:    u.motherTongue || "",
           nationality:     u.nationality || "",
+          district:        u.district || "",
+          taluka:          u.taluka || "",
+          pincode:         u.pincode || "",
           // Astrology
           birthCity:       u.birthCity || "",
           birthTime:       u.birthTime || "",
@@ -478,6 +481,14 @@ export default function ViewProfile() {
           familyValues:    u.familyValues || "",
           familyStatus:    u.familyStatus || "",
           familyLocation:  u.familyLocation || "",
+          fatherDistrict:         u.fatherDistrict || "",
+          fatherTaluka:           u.fatherTaluka || "",
+          fatherVillage:          u.fatherVillage || "",
+          fatherRelativeSurname: u.fatherRelativeSurname || "",
+          motherDistrict:         u.motherDistrict || "",
+          motherTaluka:           u.motherTaluka || "",
+          motherVillage:          u.motherVillage || "",
+          motherRelativeSurname: u.motherRelativeSurname || "",
           // Education & Career
           education:       u.education || "",
           fieldOfStudy:    u.fieldOfStudy || "",
@@ -510,6 +521,7 @@ export default function ViewProfile() {
           partnerDiet:     u.partnerDiet || "",
           partnerManglik:  u.partnerManglik || "",
           partnerDesc:     u.partnerDesc || "",
+          preferredSurname: u.preferredSurname || "",
         });
       } catch (err) {
         console.error("Failed to fetch profile:", err);
@@ -570,10 +582,7 @@ export default function ViewProfile() {
                 }
                 <div className="absolute inset-0"
                   style={{ background: "linear-gradient(to top, rgba(28,25,23,0.28) 0%, transparent 50%)" }} />
-                <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-[0.65rem] font-semibold bg-white/90 text-[#1c1917] border border-[#ede8e1] backdrop-blur-sm">
-                  <CheckCircle size={16} className="text-blue-500" fill="currentColor" stroke="white" strokeWidth={3} />
-                  {t("viewProfile.verified")}
-                </div>
+                
               </div>
 
               {/* Name strip */}
@@ -675,7 +684,10 @@ export default function ViewProfile() {
               <DetailItem label={t("viewProfile.labels.mobile")}        value={profile.mobile} />
               <DetailItem label={t("viewProfile.labels.city")}          value={profile.city} />
               <DetailItem label={t("viewProfile.labels.currentState")}  value={profile.currentState} />
-              <DetailItem label={t("viewProfile.labels.country")}       value={profile.country} />          
+              <DetailItem label={t("viewProfile.labels.country")}       value={profile.country} />  
+              <DetailItem label={t("viewProfile.labels.district")} value={profile.district} />
+              <DetailItem label={t("viewProfile.labels.taluka")} value={profile.taluka} />
+              <DetailItem label={t("viewProfile.labels.pincode")} value={profile.pincode} />        
               </div>
             </SectionCard>
 
@@ -776,6 +788,14 @@ export default function ViewProfile() {
                 <DetailItem label={t("viewProfile.labels.familyValues")}      value={profile.familyValues} />
                 <DetailItem label={t("viewProfile.labels.familyStatus")}      value={profile.familyStatus} />
                 <DetailItem label={t("viewProfile.labels.familyLocation")}    value={profile.familyLocation} />
+                <DetailItem label={t("viewProfile.labels.fatherDistrict")} value={profile.fatherDistrict} />
+                <DetailItem label={t("viewProfile.labels.fatherTaluka")} value={profile.fatherTaluka} />
+                <DetailItem label={t("viewProfile.labels.fatherVillage")} value={profile.fatherVillage} />
+                <DetailItem label={t("viewProfile.labels.fatherRelativeSurname")} value={profile.fatherRelativeSurname} />
+                <DetailItem label={t("viewProfile.labels.motherDistrict")} value={profile.motherDistrict} />
+                <DetailItem label={t("viewProfile.labels.motherTaluka")} value={profile.motherTaluka} />
+                <DetailItem label={t("viewProfile.labels.motherVillage")} value={profile.motherVillage} />
+                <DetailItem label={t("viewProfile.labels.motherRelativeSurname")} value={profile.motherRelativeSurname} />
               </div>
             </SectionCard>
 
@@ -793,6 +813,7 @@ export default function ViewProfile() {
                   <DetailItem label={t("viewProfile.labels.partnerLocation")}      value={profile.partnerLocation} />
                   <DetailItem label={t("viewProfile.labels.partnerDiet")}          value={profile.partnerDiet} />
                   <DetailItem label={t("viewProfile.labels.partnerManglik")}       value={profile.partnerManglik} />
+                  <DetailItem label={t("viewProfile.labels.preferredSurname")}     value={profile.preferredSurname}/>
                 </div>
                 {profile.partnerDesc && (
                   <div className="mt-4 pt-4 border-t border-[#f0ede9]">

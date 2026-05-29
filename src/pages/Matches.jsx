@@ -733,28 +733,48 @@ function ProfileCard({ profile: p, onView, connectLabel }) {
   const { t } = useTranslation();
   return (
     <div className="matches-card bg-white rounded-2xl overflow-hidden border border-[#ede8e1] shadow-[0_1px_6px_rgba(0,0,0,0.05)]">
-      <div className="relative h-[220px] bg-[#f0ece7] cursor-pointer overflow-hidden" onClick={onView}>
-        <div className="card-photo w-full h-full">
-          {p.photo ? <img src={p.photo} alt={p.name} className="w-full h-full object-cover" /> : <AvatarPlaceholder name={p.name} />}
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(28,25,23,0.32)] to-transparent" />
-      </div>
+
+      {/* ✅ Changed: fixed h-[220px] → aspect-[3/4], object-top → object-[center_15%] */}
+      <div
+  className="relative w-full bg-[#f0ece7] cursor-pointer overflow-hidden"
+  style={{ aspectRatio: "4/3" }}
+  onClick={onView}
+>
+  <div className="card-photo w-full h-full">
+    {p.photo
+      ? <img
+          src={p.photo}
+          alt={p.name}
+          className="w-full h-full object-cover transition-transform duration-400"
+          style={{ objectPosition: "top center" }}  // ✅ anchors to top of image
+        />
+      : <AvatarPlaceholder name={p.name} />
+    }
+  </div>
+  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(28,25,23,0.32)] to-transparent" />
+</div>
+
       <div className="p-3.5">
         <div className="flex justify-between items-start mb-2.5">
           <div>
-            <h3 onClick={onView} className="font-bold text-[1.75rem] text-[#1c1917] cursor-pointer leading-tight m-0 tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            <h3
+              onClick={onView}
+              className="font-bold text-[1.75rem] text-[#1c1917] cursor-pointer leading-tight m-0 tracking-tight"
+              style={{ fontFamily: "'Cormorant Garamond', serif" }}
+            >
               {p.name}
             </h3>
-              <p className="text-[#686f7c] text-[0.71rem] mt-0.5 font-normal">
-                {p.age ? `${p.age} yrs` : "Age not specified"}
-                {p.height ? ` · ${p.height}` : ""}
-              </p>          
+            <p className="text-[#686f7c] text-[0.71rem] mt-0.5 font-normal">
+              {p.age ? `${p.age} yrs` : "Age not specified"}
+              {p.height ? ` · ${p.height}` : ""}
+            </p>
           </div>
         </div>
+
         <div className="flex flex-col gap-1.5 mb-3">
           {[
             { icon: <MapPin size={15} />,    text: `${p.city || "City not specified"} ${p.country || ""}` },
-            { icon: <Briefcase size={15} />, text: p.profession || "Not specified" },          
+            { icon: <Briefcase size={15} />, text: p.profession || "Not specified" },
             { icon: <BookOpen size={15} />,  text: `${p.religion || "Religion not specified"} ${p.caste ? `· ${p.caste}` : ""}` },
           ].map(({ icon, text }, i) => (
             <div key={i} className="flex items-center gap-1.5 text-gray-500 text-[0.74rem]">
@@ -763,6 +783,7 @@ function ProfileCard({ profile: p, onView, connectLabel }) {
             </div>
           ))}
         </div>
+
         <div className="h-px bg-[#f3efe9] mb-3" />
         <div className="flex gap-1.5">
           <button

@@ -1257,6 +1257,15 @@ function Step2({ d, set, t }) {
   const countryData = LOCATION_DATA[d.country] || { states: [], cities: {} };
   const stateList   = countryData.states || [];
   const cityList    = d.currentState ? (countryData.cities[d.currentState] || []) : [];
+  const districtList =
+  d.currentState
+    ? (countryData.districts?.[d.currentState] || [])
+    : [];
+
+const talukaList =
+  d.district
+    ? (countryData.talukas?.[d.district] || [])
+    : [];
 
   const motherTongueOptions = t("cp.options.motherTongue", { returnObjects: true });
   const nationalityOptions  = t("cp.options.nationality",  { returnObjects: true });
@@ -1266,15 +1275,46 @@ function Step2({ d, set, t }) {
   const manglikOptions      = t("cp.options.manglik",      { returnObjects: true });
 
   const handleCountryChange = e => {
-    set("country",      e.target.value);
-    set("currentState", "");
-    set("currentCity",  "");
-  };
+   
+  set("country", e.target.value);
+
+  set("currentState", "");
+  set("district", "");
+  set("taluka", "");
+  set("currentCity", "");
+};
+  
 
   const handleStateChange = e => {
-    set("currentState", e.target.value);
-    set("currentCity",  "");
-  };
+  set("currentState", e.target.value);
+
+  set("district", "");
+  set("taluka", "");
+  set("currentCity", "");
+};
+
+ const handleDistrictChange = e => {
+  set("district", e.target.value);
+  set("taluka", "");
+};
+
+
+const formatTimeTo12Hour = (time) => {
+  if (!time) return "";
+
+  let [hours, minutes] = time.split(":");
+
+  hours = parseInt(hours, 10);
+
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  return `${hours}:${minutes} ${ampm}`;
+};
+
+
 
   return (
     <div>
@@ -1286,27 +1326,90 @@ function Step2({ d, set, t }) {
       </div>
       <Select label={t("cp.s2.country")} value={d.country} onChange={handleCountryChange}
         options={countryOptions} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        {stateList.length > 0 ? (
-          <Select label={t("cp.s2.currentState")} value={d.currentState} onChange={handleStateChange}
-            options={stateList} placeholder="Select state…" />
-        ) : (
-          <Input label={t("cp.s2.currentState")} placeholder={t("cp.s2.currentStatePh")}
-            value={d.currentState} onChange={e => set("currentState", e.target.value)} />
-        )}
-        {cityList.length > 0 ? (
-          <Select label={t("cp.s2.currentCity")} required value={d.currentCity}
-            onChange={e => set("currentCity", e.target.value)}
-            options={cityList} placeholder="Select city…" />
-        ) : (
-          <Input label={t("cp.s2.currentCity")} required placeholder={t("cp.s2.currentCityPh")}
-            value={d.currentCity} onChange={e => set("currentCity", e.target.value)} />
-        )}
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s2.birthCity")} placeholder={t("cp.s2.birthCityPh")} value={d.birthCity} onChange={e => set("birthCity", e.target.value)} />
-        <Input label={t("cp.s2.birthTime")} type="time" value={d.birthTime} onChange={e => set("birthTime", e.target.value)} />
-      </div>
+     
+{/* State + District */}
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+
+  {stateList.length > 0 ? (
+    <Select
+      label={t("cp.s2.currentState")}
+      value={d.currentState}
+      onChange={handleStateChange}
+      options={stateList}
+      placeholder="Select state…"
+    />
+  ) : (
+    <Input
+      label={t("cp.s2.currentState")}
+      placeholder={t("cp.s2.currentStatePh")}
+      value={d.currentState}
+      onChange={e => set("currentState", e.target.value)}
+    />
+  )}
+
+  <Select
+    label={t("cp.s2.district")}
+    value={d.district}
+    onChange={handleDistrictChange}
+    options={districtList}
+  />
+
+</div>
+
+{/* Taluka + City */}
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+
+  <Select
+    label={t("cp.s2.taluka")}
+    value={d.taluka}
+    onChange={e => set("taluka", e.target.value)}
+    options={talukaList}
+  />
+
+  {cityList.length > 0 ? (
+    <Select
+      label={t("cp.s2.currentCity")}
+      required
+      value={d.currentCity}
+      onChange={e => set("currentCity", e.target.value)}
+      options={cityList}
+      placeholder="Select city…"
+    />
+  ) : (
+    <Input
+      label={t("cp.s2.currentCity")}
+      required
+      placeholder={t("cp.s2.currentCityPh")}
+      value={d.currentCity}
+      onChange={e => set("currentCity", e.target.value)}
+    />
+  )}
+
+</div>
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+
+  <Input
+    label={t("cp.s2.birthTime")}
+    type="time"
+    value={d.birthTime}
+    onChange={e => {
+      const formattedTime = formatTimeTo12Hour(e.target.value);
+      set("birthTime", formattedTime);
+    }}
+  />
+
+  <Input
+    label={t("cp.s2.pincode")}
+    placeholder={t("cp.s2.pincodePh")}
+    value={d.pincode}
+    onChange={e => {
+      const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+      set("pincode", value);
+    }}
+  />
+
+</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Select label={t("cp.s2.rashi")} value={d.rashi} onChange={e => set("rashi", e.target.value)}
           options={rashiOptions} />
@@ -1356,6 +1459,22 @@ function Step4({ d, set, t }) {
   const motherOccupationOptions = t("cp.options.motherOccupation", { returnObjects: true });
   const siblingsOptions         = t("cp.options.siblingsCount", { returnObjects: true });
 
+  
+const maharashtraDistricts =
+  LOCATION_DATA?.India?.districts?.Maharashtra || [];
+
+const fatherTalukaOptions =
+  d.fatherDistrict
+    ? (LOCATION_DATA?.India?.talukas?.[d.fatherDistrict] || [])
+    : [];
+
+const motherTalukaOptions =
+  d.motherDistrict
+    ? (LOCATION_DATA?.India?.talukas?.[d.motherDistrict] || [])
+    : [];
+
+
+
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
@@ -1364,22 +1483,47 @@ function Step4({ d, set, t }) {
           options={fatherOccupationOptions}/>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+         <Select label={t("cp.s4.fatherDistrict")} value={d.fatherDistrict} onChange={e => { set("fatherDistrict", e.target.value); set("fatherTaluka", ""); }} options={maharashtraDistricts} /> 
+         <Select label={t("cp.s4.fatherTaluka")} value={d.fatherTaluka} onChange={e => set("fatherTaluka", e.target.value)} options={fatherTalukaOptions} />
+      </div>  
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Input label={t("cp.s4.fatherVillage")} placeholder={t("cp.s4.fatherVillagePh")} value={d.fatherVillage} onChange={e => set("fatherVillage", e.target.value)}/>
+        <Input label={t("cp.s4.fatherRelativeSurname")} placeholder={t("cp.s4.fatherRelativeSurnamePh")} value={d.fatherRelativeSurname} onChange={e => set("fatherRelativeSurname", e.target.value)}/>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Input label={t("cp.s4.motherName")} placeholder={t("cp.s4.motherNamePh")} value={d.motherName} onChange={e => set("motherName", e.target.value)} />
         <Select label={t("cp.s4.motherOccupation")} value={d.motherOccupation} onChange={e => set("motherOccupation", e.target.value)}
           options={motherOccupationOptions} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s4.brothers")} value={d.brothers} onChange={e => set("brothers", e.target.value)}
-          options={siblingsOptions} />
-        <Select label={t("cp.s4.brothersMarried")} value={d.brothersMarried} onChange={e => set("brothersMarried", e.target.value)}
-          options={siblingsOptions} />
+        <Select label={t("cp.s4.motherDistrict")} value={d.motherDistrict} onChange={e => { set("motherDistrict", e.target.value); set("motherTaluka", ""); }} options={maharashtraDistricts} /> 
+        <Select label={t("cp.s4.motherTaluka")} value={d.motherTaluka} onChange={e => set("motherTaluka", e.target.value)} options={motherTalukaOptions} /> 
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s4.sisters")} value={d.sisters} onChange={e => set("sisters", e.target.value)}
-          options={siblingsOptions} />
-        <Select label={t("cp.s4.sistersMarried")} value={d.sistersMarried} onChange={e => set("sistersMarried", e.target.value)}
-          options={siblingsOptions} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5"> 
+        <Input label={t("cp.s4.motherVillage")} placeholder={t("cp.s4.motherVillagePh")} value={d.motherVillage} onChange={e => set("motherVillage", e.target.value)} /> 
+        <Input label={t("cp.s4.motherRelativeSurname")} placeholder={t("cp.s4.motherRelativeSurnamePh")} value={d.motherRelativeSurname} onChange={e => set("motherRelativeSurname", e.target.value)} /> 
       </div>
+      
+
+     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+  <Select
+    label={t("cp.s4.siblings")}
+    value={d.siblings}
+    onChange={e => set("siblings", e.target.value)}
+    options={siblingsOptions}
+  />
+
+  <Select
+    label={t("cp.s4.siblingsMarried")}
+    value={d.siblingsMarried}
+    onChange={e => set("siblingsMarried", e.target.value)}
+    options={[
+    t("common.yes"),
+    t("common.no")
+]}
+  />
+</div>
+      
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5">
         <Select label={t("cp.s4.familyType")} value={d.familyType} onChange={e => set("familyType", e.target.value)}
           options={familyTypeOptions} />
@@ -1489,8 +1633,39 @@ function Step7({ d, set, t }) {
         <Select label={t("cp.s7.partnerAgeMax")} value={d.partnerAgeMax} onChange={e => set("partnerAgeMax", e.target.value)} options={ageOptions}/>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s7.partnerHeightMin")} placeholder={t("cp.s7.partnerHeightMinPh")} value={d.partnerHeightMin} onChange={e => set("partnerHeightMin", e.target.value)} />
-        <Input label={t("cp.s7.partnerHeightMax")} placeholder={t("cp.s7.partnerHeightMaxPh")} value={d.partnerHeightMax} onChange={e => set("partnerHeightMax", e.target.value)} />
+        <Input
+  label={t("cp.s7.partnerHeightMin")}
+  placeholder="5'9"
+  value={d.partnerHeightMin}
+  onChange={e => {
+    let value = e.target.value.replace(/[^\d]/g, "");
+
+    // Auto format like 5'9
+    if (value.length >= 2) {
+      value = `${value[0]}'${value.slice(1, 2)}`;
+    }
+
+    set("partnerHeightMin", value);
+  }}
+  maxLength={3}
+/>
+
+<Input
+  label={t("cp.s7.partnerHeightMax")}
+  placeholder="5'9"
+  value={d.partnerHeightMax}
+  onChange={e => {
+    let value = e.target.value.replace(/[^\d]/g, "");
+
+    // Auto format like 5'9
+    if (value.length >= 2) {
+      value = `${value[0]}'${value.slice(1, 2)}`;
+    }
+
+    set("partnerHeightMax", value);
+  }}
+  maxLength={3}
+/>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Select label={t("cp.s7.partnerMaritalStatus")} value={d.partnerMaritalStatus} onChange={e => set("partnerMaritalStatus", e.target.value)}
@@ -1504,6 +1679,7 @@ function Step7({ d, set, t }) {
         <Select label={t("cp.s7.partnerEducation")} value={d.partnerEducation} onChange={e => set("partnerEducation", e.target.value)}
           options={partnerEducationOptions} />
       </div>
+      <Input label={t("cp.s7.preferredSurnames")} placeholder={t("cp.s7.preferredSurnamesPh")} value={d.preferredSurnames} onChange={e => set("preferredSurnames", e.target.value)}/>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Select label={t("cp.s7.partnerIncome")} value={d.partnerIncome} onChange={e => set("partnerIncome", e.target.value)}
           options={partnerIncomeOptions} />
@@ -1535,40 +1711,7 @@ function Step8({ d, set, t, onPhotoSelect }) {
   };
   const photo = d.photos && d.photos[0];
 
-  const handleIdDoc = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    set("idDoc", file.name);
-    set("verified", false);
-    setVerifying(true);
-    setTimeout(() => {
-      setVerifying(false);
-      set("verified", true);
-    }, 2500);
-  };
-
-  const docTypes = [
-    {
-      icon: "🪪",
-      label: t("cp.s8.documents.aadhaar"),
-      hint: t("cp.s8.documents.aadhaarHint"),
-    },
-    {
-      icon: "💳",
-      label: t("cp.s8.documents.pan"),
-      hint: t("cp.s8.documents.panHint"),
-    },
-    {
-      icon: "📕",
-      label: t("cp.s8.documents.passport"),
-      hint: t("cp.s8.documents.passportHint"),
-    },
-    {
-      icon: "🚗",
-      label: t("cp.s8.documents.dl"),
-      hint: t("cp.s8.documents.dlHint"),
-    },
-  ];
+ 
 
   return (
     <div>
@@ -1606,140 +1749,7 @@ function Step8({ d, set, t, onPhotoSelect }) {
         </div>
       </div>
 
-      <div className="border-t border-[#f0ede9] my-5" />
-
-      {/* ── ID VERIFICATION ── */}
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <Label>{t("cp.s8.idVerification")}</Label>
-          {d.verified && (
-            <span className="inline-flex items-center gap-1 text-[0.68rem] font-bold px-2 py-0.5 rounded-full mb-1.5"
-              style={{ background: "#eaf4ea", color: "#4a7a4a" }}>
-              ✓ {t("cp.s8.verified")}
-            </span>
-          )}
-        </div>
-
-        <p className="text-[0.78rem] text-[#9a8c7a] mb-4">
-          {t("cp.s8.idDesc")}
-        </p>
-
-        {/* DOCUMENT TYPES */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          {docTypes.map(dt => (
-            <div
-              key={dt.label}
-              onClick={() => setSelectedDoc(dt.label)}
-              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl border cursor-pointer transition-all
-                ${selectedDoc === dt.label
-                  ? "border-[#c2852a] bg-[#fdf6ec]"
-                  : "border-[#ece8e1] bg-[#fdfcfa]"
-                }`}
-            >
-              <span className="text-lg">{dt.icon}</span>
-              <div>
-                <div className="text-[0.75rem] font-semibold text-[#1c1917]">
-                  {dt.label}
-                </div>
-                <div className="text-[0.65rem] text-[#9a8c7a]">
-                  {dt.hint}
-                </div>
-              </div>
-              {selectedDoc === dt.label && (
-                <span className="ml-auto text-[#c2852a] text-sm">✓</span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* UPLOAD */}
-        {!d.idDoc ? (
-          selectedDoc ? (
-            <label className="flex items-center gap-4 border-2 border-dashed border-[#f0ddb8] rounded-xl p-4 cursor-pointer hover:border-[#c2852a] hover:bg-[#fdf9f3] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#fdf6ec] flex items-center justify-center text-xl flex-shrink-0">
-                📄
-              </div>
-              <div className="flex-1">
-                <div className="text-[0.83rem] font-semibold text-[#1c1917]">
-                  {t("cp.s8.uploadTitle")}
-                </div>
-                <div className="text-[0.72rem] text-[#9a8c7a]">
-                  {t("cp.s8.uploadHint")}
-                </div>
-              </div>
-              <div className="flex-shrink-0 text-[0.75rem] font-semibold text-[#c2852a] border border-[#f0ddb8] bg-[#fdf6ec] px-3 py-1.5 rounded-lg">
-                {t("cp.s8.browse")}
-              </div>
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (!file) return;
-                  set("idDoc", file.name);
-                  set("docType", selectedDoc);
-                  set("verified", false);
-                  setVerifying(true);
-                  setTimeout(() => {
-                    setVerifying(false);
-                    set("verified", true);
-                  }, 2500);
-                }}
-              />
-            </label>
-          ) : (
-            <div className="text-center text-[0.72rem] text-[#9a8c7a] py-3">
-              👉 {t("cp.s8.selectDoc")}
-            </div>
-          )
-        ) : (
-          <div className="rounded-xl border overflow-hidden"
-            style={{ borderColor: d.verified ? "#b8d8b8" : "#f0ddb8" }}>
-            <div className="flex items-center gap-3 px-4 py-3"
-              style={{ background: d.verified ? "#f0f8f0" : "#fdf6ec" }}>
-              <span className="text-xl">📄</span>
-              <div className="flex-1 min-w-0">
-                <div className="text-[0.8rem] font-semibold text-[#1c1917] truncate">
-                  {d.idDoc}
-                </div>
-                <div className="text-[0.68rem] text-[#9a8c7a]">
-                  {d.docType} • Document uploaded
-                </div>
-              </div>
-              {verifying ? (
-                <div className="flex items-center gap-1.5 text-[0.72rem] font-semibold text-[#c2852a]">
-                  <span className="inline-block w-3.5 h-3.5 border-2 border-[#c2852a] border-t-transparent rounded-full animate-spin" />
-                  {t("cp.s8.verifying")}
-                </div>
-              ) : d.verified ? (
-                <div className="flex items-center gap-1 text-[0.72rem] font-bold text-[#4a7a4a]">
-                  <span className="w-5 h-5 bg-[#4a7a4a] rounded-full flex items-center justify-center text-white text-[0.6rem]">✓</span>
-                  {t("cp.s8.verified")}
-                </div>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => { set("idDoc", ""); set("verified", false); setSelectedDoc(null); }}
-                className="text-[#9a8c7a] hover:text-red-500 text-lg cursor-pointer bg-transparent border-none leading-none transition-colors">
-                ×
-              </button>
-            </div>
-            {d.verified && (
-              <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: "#eaf4ea" }}>
-                <span className="text-base">🎉</span>
-                <p className="text-[0.75rem] font-semibold text-[#4a7a4a]">
-                  {t("cp.s8.verifiedMsg")}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        <p className="text-[0.68rem] text-[#b0a090] mt-3 flex items-center gap-1">
-          {t("cp.s8.privacyNote")}
-        </p>
-      </div>
+      
     </div>
   );
 }
@@ -1748,8 +1758,8 @@ function Step8({ d, set, t, onPhotoSelect }) {
 const initData = {
   firstName: "", lastName: "", dob: "", gender: "", maritalStatus: "", profileFor: "",
   height: "", weight: "", bodyType: "", complexion: "", mobile: "", about: "",
-  motherTongue: "", nationality: "", currentCity: "", currentState: "", country: "",
-  birthCity: "", birthTime: "", rashi: "", nakshatra: "", gotra: "", manglik: "",
+  motherTongue: "", nationality: "", currentCity: "", currentState: "", country: "", district: "",  taluka: "",
+  birthCity: "", birthTime: "", rashi: "", nakshatra: "", gotra: "", manglik: "",pincode: "",
   religion: "", caste: "", subCaste: "", casteNoBar: "", religiousPractice: "", community: "",
   fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "",
   brothers: "", brothersMarried: "", sisters: "", sistersMarried: "",
@@ -1770,7 +1780,7 @@ const initData = {
 export default function CompleteProfile({ onClose }) {
   const navigate        = useNavigate();
   // const { saveProfile } = useProfile();
-  const { t }           = useTranslation();
+  const { t, i18n } = useTranslation();
   const [step,      setStep]      = useState(1);
   // const [data,      setData]      = useState(initData);
 
@@ -1921,20 +1931,50 @@ const [data, setData] = useState({ ...initData, ...profileData });
             </h1>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[0.72rem] font-bold"
-              style={{ background: "rgba(194,133,42,0.18)", color: "#e8c98a" }}>
-              <span>{steps[step-1].icon}</span>
-              <span>{t("cp.header.stepOf", { step, total: steps.length })}</span>
-            </div>
-            {onClose && (
-              <button onClick={onClose}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer border-none text-lg leading-none"
-                style={{ background: "transparent" }}
-                aria-label="Close">
-                ×
-              </button>
-            )}
-          </div>
+
+  {/* Language Toggle */}
+  <button
+    onClick={() =>
+      i18n.changeLanguage(
+        i18n.language === "en" ? "mr" : "en"
+      )
+    }
+    className="px-3 py-1 rounded-full border border-[#c2852a] text-[#f4c27a] text-[0.7rem] font-semibold hover:bg-[#c2852a] hover:text-white transition"
+    style={{
+      background: "rgba(194,133,42,0.12)"
+    }}
+  >
+    {i18n.language === "en" ? "मराठी" : "English"}
+  </button>
+
+  <div
+    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[0.72rem] font-bold"
+    style={{
+      background: "rgba(194,133,42,0.18)",
+      color: "#e8c98a"
+    }}
+  >
+    <span>{steps[step - 1].icon}</span>
+
+    <span>
+      {t("cp.header.stepOf", {
+        step,
+        total: steps.length
+      })}
+    </span>
+  </div>
+
+  {onClose && (
+    <button
+      onClick={onClose}
+      className="w-7 h-7 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer border-none text-lg leading-none"
+      style={{ background: "transparent" }}
+      aria-label="Close"
+    >
+      ×
+    </button>
+  )}
+</div>
         </div>
 
         {/* Progress bar */}

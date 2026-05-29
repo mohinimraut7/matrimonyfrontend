@@ -234,7 +234,12 @@
     "passwordPlaceholder": "Enter your password",
     "submitBtn": "Login ",
     "noAccount": "Don't have an account?",
-    "registerLink": "Register"
+    "registerLink": "Register",
+    "captchaLabel": "Enter the code shown below",
+    "captchaPlaceholder": "Type the 4 characters",
+    "captchaError": "Incorrect code — a new one has been generated",
+    "loading": "Logging in..."
+
   },
   "register": {
     "tag": "Trusted Matrimony Platform",
@@ -420,6 +425,9 @@
     "city": "Current City",
     "currentState": "Current State",
     "country": "Country",
+    "district": "District",
+    "taluka": "Taluka",
+    "pincode": "Pincode",
     "birthCity": "Birth City",
     "birthTime": "Birth Time",
     "rashi": "Rashi",
@@ -450,12 +458,18 @@
     "languages": "Languages",
     "fatherName": "Father's Name",
     "fatherOccupation": "Father's Occupation",
+    "fatherDistrict": "Father District",
+    "fatherTaluka": "Father Taluka",
+    "fatherVillage": "Father Village",
+    "fatherRelativeSurname": "Father Relative Surnames",
     "motherName": "Mother's Name",
     "motherOccupation": "Mother's Occupation",
-    "brothers": "Brothers",
-    "brothersMarried": "Brothers Married",
-    "sisters": "Sisters",
-    "sistersMarried": "Sisters Married",
+    "motherDistrict": "Mother District",
+    "motherTaluka": "Mother Taluka",
+    "motherVillage": "Mother Village",
+    "motherRelativeSurname": "Mother Relative Surnames",
+    "siblings": "Siblings",
+    "siblingsMarried": "Siblings Married",
     "familyType": "Family Type",
     "familyValues": "Family Values",
     "familyStatus": "Family Status",
@@ -469,7 +483,8 @@
     "partnerIncome": "Income",
     "partnerLocation": "Location",
     "partnerDiet": "Diet",
-    "partnerManglik": "Manglik"
+    "partnerManglik": "Manglik",
+    "preferredSurname": "Preferred Surnames"
   }
 },
 
@@ -543,9 +558,13 @@
       "nationality": "Nationality",
       "country": "Country",
       "currentState": "Current State",
+      "district":"District",
+      "taluka":"Taluka",
       "currentCity": "Current City",
       "birthCity": "Birth City",
       "birthTime": "Time of Birth",
+      "pincode": "Pincode",
+      "pincodePh": "Enter Pincode",
       "rashi": "Rashi (Moon Sign)",
       "nakshatra": "Nakshatra",
       "gotra": "Gotra",
@@ -568,12 +587,26 @@
     "s4": {
       "fatherName": "Father's Name",
       "fatherOccupation": "Father's Occupation",
+      "fatherDistrict":"District",
+      "fatherDistrictPh":"Father's District",
+      "fatherTaluka":"Taluka",
+      "fatherTalukaPh":"Father's Taluka",
+      "fatherVillage":"Father's Village",
+      "fatherVillagePh":"Mother's Village",
+      "fatherRelativeSurname":"Father's Relative Surname's ",
+      "fatherRelativeSurnamePh":"Mother's Relative Surname's ",
       "motherName": "Mother's Name",
       "motherOccupation": "Mother's Occupation",
-      "brothers": "No. of Brothers",
-      "brothersMarried": "Brothers Married",
-      "sisters": "No. of Sisters",
-      "sistersMarried": "Sisters Married",
+      "motherDistrict":"District",
+      "motherDistrictPh":"Mother's District",
+      "motherTaluka":"Taluka",
+      "motherTalukaPh":"Mother's Taluka",
+      "motherVillage":"Mother's Village",
+      "motherVillagePh":"Mother's Village",
+      "motherRelativeSurname":"Mother's Relative Surname's ",
+      "motherRelativeSurnamePh":"Mother's Relative Surname's ",
+      "siblings":"No. of Siblings",
+      "siblingsMarried":"Siblings Married?",
       "familyType": "Family Type",
       "familyValues": "Family Values",
       "familyStatus": "Family Status",
@@ -616,6 +649,8 @@
       "partnerReligion": "Preferred Religion",
       "partnerCaste": "Preferred Caste",
       "partnerEducation": "Preferred Education",
+      "preferredSurnames":"Preferred Surname's",
+      "preferredSurnamesPh":"Preferred Surname's",
       "partnerIncome": "Preferred Income",
       "partnerLocation": "Preferred Location",
       "partnerDiet": "Partner Diet Preference",
@@ -680,7 +715,7 @@
         ],
 
       "gender": ["Male","Female","Other"],
-      "maritalStatus": ["Never Married","Divorced","Widowed","Awaiting Divorce"],
+      "maritalStatus": ["Single","Divorced","Widowed"],
       "profileFor": ["Self","Son","Daughter","Brother","Sister","Relative","Friend"],
       "bodyType": ["Slim","Average","Athletic","Heavy"],
       "complexion": ["Very Fair","Fair","Wheatish","Wheatish Brown","Dark"],
@@ -703,7 +738,9 @@
           "Homemaker","Business","Service / Job","Retired","Not Employed","Deceased","Other"
         ],
 
-        "siblingsCount": ["0","1","2","3","4","5+"],
+        "siblingsCount": ["0","1","2","3","4"],
+
+        
 
       "motherTongue": ["Hindi","Marathi","Gujarati","Bengali","Tamil","Telugu","Kannada","Malayalam","Punjabi","Odia","Urdu","English","Other"],
       "nationality": ["Indian","NRI","Foreign National"],
@@ -737,7 +774,7 @@
       "vehicle": ["No","Two Wheeler","Car","Both"],
       "property": ["No","Flat / Apartment","Independent House","Plot / Land","Multiple Properties"],
 
-      "partnerMaritalStatus": ["Never Married","Divorced","Widowed","Any"],
+      "partnerMaritalStatus": ["Single","Divorced","Widowed","Any"],
       "partnerReligion": ["Hindu","Muslim","Christian","Sikh","Any","Other"],
       "partnerCaste": ["Same Caste","Any Caste","Open to All"],
       "partnerEducation": ["Any","Graduate & Above","Post Graduate & Above","Doctorate"],
@@ -750,7 +787,9 @@
   },
 
   "common": {
-  "years": "years"
+  "years": "years",
+  "yes": "Yes",
+  "no": "No"
   },
 
   "data": {

@@ -69,8 +69,9 @@ export default function Profile() {
               {/* Avatar / Photo */}
               <div className="relative flex-shrink-0">
                 {p.photos && p.photos.length > 0 ? (
-                  <img src={p.photos[0]} alt={fullName}
-                    className="w-[110px] h-[110px] rounded-2xl object-cover border-2 border-[rgba(243,215,159,0.3)]" />
+                <img src={p.photos[0]} alt={fullName}
+                  className="w-[110px] h-[110px] rounded-2xl object-cover border-2 border-[rgba(243,215,159,0.3)]"
+                  style={{ objectPosition: "top center" }} />
                 ) : (
                   <div className="w-[110px] h-[110px] rounded-2xl flex items-center justify-center border-2 border-[rgba(243,215,159,0.3)]"
                     style={{ background: `linear-gradient(145deg, ${AVATAR_BG[0]}, ${AVATAR_BG[1]})` }}>
@@ -184,20 +185,32 @@ export default function Profile() {
                     <p className="text-[0.78rem] text-gray-500 mt-0.5">{v(p.motherOccupation, "")}</p>
                   </div>
                   <div className="col-span-2 py-3.5 border-b border-[#f0ede9]">
-                    <p className="text-[0.68rem] font-bold tracking-[0.07em] uppercase text-gray-400 mb-0.5">{t("profile.labels.siblings")}</p>
-                    <p className="text-[0.85rem] font-semibold text-[#1c1917]">
-                      {[
-                        p.brothers ? `${p.brothers} Brother(s)${p.brothersMarried ? ` · ${p.brothersMarried} married` : ""}` : "",
-                        p.sisters  ? `${p.sisters} Sister(s)${p.sistersMarried ? ` · ${p.sistersMarried} married` : ""}` : "",
-                      ].filter(Boolean).join("   ") || "—"}
-                    </p>
-                  </div>
+                  <p className="text-[0.68rem] font-bold tracking-[0.07em] uppercase text-gray-400 mb-0.5">
+                    {t("profile.labels.siblings")}
+                  </p>
+
+                  <p className="text-[0.85rem] font-semibold text-[#1c1917]">
+                    {p.siblings
+                      ? `${p.siblings} ${
+                          t("profile.labels.siblings")
+                        } · ${p.siblingsMarried || "—"}`
+                      : "—"}
+                  </p>
+                </div>
                 </div>
                 <InfoGrid items={[
                   { label: t("profile.labels.familyType"),   value: p.familyType },
                   { label: t("profile.labels.familyValues"), value: p.familyValues },
                   { label: t("profile.labels.familyStatus"), value: p.familyStatus },
                   { label: t("profile.labels.nativePlace"),  value: p.familyLocation },
+                  { label: t("profile.labels.fatherDistrict"), value: p.fatherDistrict },
+                  { label: t("profile.labels.fatherTaluka"), value: p.fatherTaluka },
+                  { label: t("profile.labels.fatherVillage"), value: p.fatherVillage },
+                  { label: t("profile.labels.fatherRelativeSurname"), value: p.fatherRelativeSurname },
+                  { label: t("profile.labels.motherDistrict"), value: p.motherDistrict },
+                  { label: t("profile.labels.motherTaluka"), value: p.motherTaluka },
+                  { label: t("profile.labels.motherVillage"), value: p.motherVillage },
+                  { label: t("profile.labels.motherRelativeSurname"), value: p.motherRelativeSurname },
                 ]} />
               </div>
 
@@ -283,6 +296,7 @@ export default function Profile() {
                     { label: t("profile.labels.partnerLocation"),  value: p.partnerLocation },
                     { label: t("profile.labels.partnerDiet"),      value: p.partnerDiet },
                     { label: t("profile.labels.partnerManglik"),   value: p.partnerManglik },
+                    { label: t("profile.labels.preferredSurname"), value: p.preferredSurname },
                   ]} />
                   {p.partnerDesc && (
                     <>
@@ -300,8 +314,9 @@ export default function Profile() {
                  <CardTitle>{t("profile.photosTitle")}</CardTitle>
                   <div className="flex flex-wrap gap-3">
                     {p.photos.map((src, i) => (
-                      <img key={i} src={src} alt="" className="w-28 h-28 rounded-xl object-cover border border-[#ece8e1]" />
-                    ))}
+  <img key={i} src={src} alt="" className="w-28 h-28 rounded-xl object-cover border border-[#ece8e1]"
+    style={{ objectPosition: "top center" }} />
+))}
                   </div>
                 </div>
               )}
@@ -342,6 +357,9 @@ export default function Profile() {
                     { label: "Current City",  value: p.currentCity },
                     { label: "Current State", value: p.currentState },
                     { label: "Country",       value: p.country },
+                    { label: t("profile.labels.district"), value: p.district },
+                    { label: t("profile.labels.taluka"), value: p.taluka },
+                    { label: t("profile.labels.pincode"), value: p.pincode },
                   ]
                     .filter(({ value }) => value && String(value).trim() !== "")
                     .map(({ label, value }, i, arr) => (

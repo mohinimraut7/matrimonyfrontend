@@ -234,7 +234,11 @@
     "passwordPlaceholder": "तुमचा पासवर्ड टाका",
     "submitBtn": "लॉगिन करा ",
     "noAccount": "खाते नाही?",
-    "registerLink": "नोंदणी करा"
+    "registerLink": "नोंदणी करा",
+    "captchaLabel": "खाली दिलेला कोड टाका",
+    "captchaPlaceholder": "४ अक्षरी कोड टाका",
+    "captchaError": "चुकीचा कोड — नवीन कोड तयार करण्यात आला आहे",
+    "loading": "लॉगिन सुरू आहे..."
   },
   "register": {
     "tag": "विश्वासार्ह विवाह मंच",
@@ -420,6 +424,9 @@
     "city": "सध्याचे शहर",
     "currentState": "सध्याचे राज्य",
     "country": "देश",
+    "district": "जिल्हा",
+    "taluka": "तालुका",
+    "pincode": "पिनकोड",
     "birthCity": "जन्मशहर",
     "birthTime": "जन्मवेळ",
     "rashi": "राशी",
@@ -450,12 +457,18 @@
     "languages": "भाषा",
     "fatherName": "वडिलांचे नाव",
     "fatherOccupation": "वडिलांचा व्यवसाय",
+    "fatherDistrict": "वडिलांचा जिल्हा",
+    "fatherTaluka": "वडिलांचा तालुका",
+    "fatherVillage": "वडिलांचे गाव",
+    "fatherRelativeSurname": "वडिलांच्या नातेवाईकांची आडनावे",
     "motherName": "आईचे नाव",
     "motherOccupation": "आईचा व्यवसाय",
-    "brothers": "भाऊ",
-    "brothersMarried": "विवाहित भाऊ",
-    "sisters": "बहीण",
-    "sistersMarried": "विवाहित बहीण",
+    "motherDistrict": "आईचा जिल्हा",
+    "motherTaluka": "आईचा तालुका",
+    "motherVillage": "आईचे गाव",
+    "motherRelativeSurname": "आईच्या नातेवाईकांची आडनावे",
+    "siblings": "भावंडे",
+    "siblingsMarried": "भावंडांचे लग्न झाले आहे का?",
     "familyType": "कुटुंब प्रकार",
     "familyValues": "कौटुंबिक मूल्ये",
     "familyStatus": "कौटुंबिक स्थिती",
@@ -469,7 +482,8 @@
     "partnerIncome": "उत्पन्न",
     "partnerLocation": "ठिकाण",
     "partnerDiet": "आहार",
-    "partnerManglik": "मंगळिक"
+    "partnerManglik": "मंगळिक",
+    "preferredSurname": "प्राधान्य आडनावे"
   }
 },
   
@@ -542,9 +556,13 @@
       "nationality": "राष्ट्रीयत्व",
       "country": "देश",
       "currentState": "सध्याचे राज्य",
+      "district":"जिल्हा",
+      "taluka":"तालुका",
       "currentCity": "सध्याचे शहर",
       "birthCity": "जन्म शहर",
       "birthTime": "जन्म वेळ",
+      "pincode": "पिनकोड",
+      "pincodePh": "पिनकोड टाका",
       "rashi": "राशी",
       "nakshatra": "नक्षत्र",
       "gotra": "गोत्र",
@@ -567,12 +585,26 @@
     "s4": {
       "fatherName": "वडिलांचे नाव",
       "fatherOccupation": "वडिलांचा व्यवसाय",
+      "fatherDistrict": "जिल्हा",
+      "fatherDistrictPh": "वडिलांचा जिल्हा",
+      "fatherTaluka": "तालुका",
+      "fatherTalukaPh": "वडिलांचा तालुका",
+      "fatherVillage": "वडिलांचे गाव",
+      "fatherVillagePh": "वडिलांचे गाव",
+      "fatherRelativeSurname": "वडिलांच्या नातेवाईकांचे आडनाव",
+      "fatherRelativeSurnamePh": "वडिलांच्या नातेवाईकांचे आडनाव",
       "motherName": "आईचे नाव",
       "motherOccupation": "आईचा व्यवसाय",
-      "brothers": "भावांची संख्या",
-      "brothersMarried": "विवाहित भाऊ",
-      "sisters": "बहिणींची संख्या",
-      "sistersMarried": "विवाहित बहिणी",
+      "motherDistrict": "जिल्हा",
+      "motherDistrictPh": "आईचा जिल्हा",
+      "motherTaluka": "तालुका",
+      "motherTalukaPh": "आईचा तालुका",
+      "motherVillage": "आईचे गाव",
+      "motherVillagePh": "आईचे गाव",
+      "motherRelativeSurname": "आईच्या नातेवाईकांचे आडनाव",
+      "motherRelativeSurnamePh": "आईच्या नातेवाईकांचे आडनाव",
+      "siblings": "भावंडांची संख्या",
+      "siblingsMarried": "भावंडांचे लग्न झाले आहे का?",
       "familyType": "कुटुंब प्रकार",
       "familyValues": "कुटुंब मूल्ये",
       "familyStatus": "कुटुंब स्थिती",
@@ -689,12 +721,14 @@
   "गृहिणी","व्यवसाय","नोकरी","निवृत्त","काम करत नाही","स्वर्गवासी","इतर"
 ],
 
-"siblingsCount": ["0","1","2","3","4","5+"],
+"siblingsCount": ["0","1","2","3","4"],
+
+
 
           
       "gender": ["पुरुष","स्त्री","इतर"],
 
-      "maritalStatus": ["कधीही लग्न झालेले नाही","घटस्फोटित","विधवा / विधुर","घटस्फोटाची प्रतीक्षा"],
+      "maritalStatus": ["अविवाहित","घटस्फोटित","विधवा / विधुर"],
 
       "profileFor": ["स्वतः","मुलगा","मुलगी","भाऊ","बहिण","नातेवाईक","मित्र"],
 
@@ -744,8 +778,7 @@
 
       "vehicle": ["नाही","दुचाकी","कार","दोन्ही"],
       "property": ["नाही","फ्लॅट / अपार्टमेंट","स्वतंत्र घर","जमीन","अनेक मालमत्ता"],
-
-      "partnerMaritalStatus": ["कधीही लग्न झालेले नाही","घटस्फोटित","विधवा / विधुर","कोणतेही"],
+      "partnerMaritalStatus": ["अविवाहित","घटस्फोटित","विधवा / विधुर","कोणतेही"],
       "partnerReligion": ["हिंदू","मुस्लिम","ख्रिश्चन","शीख","कोणताही","इतर"],
       "partnerCaste": ["समान जात","कोणतीही जात","सर्व स्वीकार्य"],
       "partnerEducation": ["कोणतेही","पदवी व त्यापुढे","पदव्युत्तर व त्यापुढे","डॉक्टरेट"],
@@ -758,7 +791,9 @@
   }, 
    
   "common": {
-  "years": "वर्षे"
+  "years": "वर्षे",
+   "yes": "होय",
+  "no": "नाही"
   },
   "data": {
   "city": {

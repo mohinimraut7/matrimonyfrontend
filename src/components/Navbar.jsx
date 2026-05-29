@@ -343,7 +343,7 @@ export default function Navbar() {
               className="w-9 h-9 rounded-full overflow-hidden hover:ring-2 hover:ring-black transition flex-shrink-0"
             >
               {hasPhoto ? (
-                <img src={profileData.photos[0]} alt="Profile" className="w-full h-full object-cover" />
+               <img src={profileData.photos[0]} alt="Profile" className="w-full h-full object-cover" style={{ objectPosition: "top center" }} />
               ) : avatarInitials ? (
                 <div className="w-full h-full bg-[#1c1917] flex items-center justify-center">
                   <span className="text-white text-xs font-bold" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
