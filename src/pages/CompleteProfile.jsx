@@ -1253,19 +1253,18 @@ function Step1({ d, set, t }) {
   );
 }
 
-function Step2({ d, set, t }) {
-  const countryData = LOCATION_DATA[d.country] || { states: [], cities: {} };
-  const stateList   = countryData.states || [];
-  const cityList    = d.currentState ? (countryData.cities[d.currentState] || []) : [];
-  const districtList =
-  d.currentState
-    ? (countryData.districts?.[d.currentState] || [])
-    : [];
 
-const talukaList =
-  d.district
-    ? (countryData.talukas?.[d.district] || [])
-    : [];
+function Step2({ d, set, t }) {
+  const labels = t("locationLabels", { returnObjects: true });
+
+  const lbl = (type, enVal) =>
+    (labels && labels[type] && labels[type][enVal]) ? labels[type][enVal] : enVal;
+
+  const countryData  = LOCATION_DATA[d.country]  || { states: [], districts: {}, talukas: {}, cities: {} };
+  const stateList    = countryData.states         || [];
+  const districtList = d.currentState ? (countryData.districts[d.currentState] || []) : [];
+  const talukaList   = d.district     ? (countryData.talukas[d.district]        || []) : [];
+  const cityList     = d.currentState ? (countryData.cities[d.currentState]     || []) : [];
 
   const motherTongueOptions = t("cp.options.motherTongue", { returnObjects: true });
   const nationalityOptions  = t("cp.options.nationality",  { returnObjects: true });
@@ -1274,152 +1273,113 @@ const talukaList =
   const nakshatraOptions    = t("cp.options.nakshatra",    { returnObjects: true });
   const manglikOptions      = t("cp.options.manglik",      { returnObjects: true });
 
+  // country options from i18n but value saved as English
+  // We need reverse map: translated label → English value
+  const enCountries = ["India"];
   const handleCountryChange = e => {
-   
-  set("country", e.target.value);
-
-  set("currentState", "");
-  set("district", "");
-  set("taluka", "");
-  set("currentCity", "");
-};
-  
+    const idx = countryOptions.indexOf(e.target.value);
+    set("country", enCountries[idx] ?? e.target.value);
+    set("currentState", ""); set("district", ""); set("taluka", ""); set("currentCity", "");
+  };
 
   const handleStateChange = e => {
-  set("currentState", e.target.value);
+    // stateList is already English from LOCATION_DATA
+    set("currentState", e.target.value);
+    set("district", ""); set("taluka", ""); set("currentCity", "");
+  };
 
-  set("district", "");
-  set("taluka", "");
-  set("currentCity", "");
-};
+  const handleDistrictChange = e => {
+    set("district", e.target.value);
+    set("taluka", "");
+  };
 
- const handleDistrictChange = e => {
-  set("district", e.target.value);
-  set("taluka", "");
-};
-
-
-const formatTimeTo12Hour = (time) => {
-  if (!time) return "";
-
-  let [hours, minutes] = time.split(":");
-
-  hours = parseInt(hours, 10);
-
-  const ampm = hours >= 12 ? "PM" : "AM";
-
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-
-  return `${hours}:${minutes} ${ampm}`;
-};
-
-
+  const formatTimeTo12Hour = (time) => {
+    if (!time) return "";
+    let [hours, minutes] = time.split(":");
+    hours = parseInt(hours, 10);
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes} ${ampm}`;
+  };
 
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.motherTongue")} required value={d.motherTongue} onChange={e => set("motherTongue", e.target.value)}
-          options={motherTongueOptions} />
-        <Select label={t("cp.s2.nationality")} value={d.nationality} onChange={e => set("nationality", e.target.value)}
-          options={nationalityOptions} />
+        <Select label={t("cp.s2.motherTongue")} required value={d.motherTongue}
+          onChange={e => set("motherTongue", e.target.value)} options={motherTongueOptions} />
+        <Select label={t("cp.s2.nationality")} value={d.nationality}
+          onChange={e => set("nationality", e.target.value)} options={nationalityOptions} />
       </div>
-      <Select label={t("cp.s2.country")} value={d.country} onChange={handleCountryChange}
+
+      {/* Country — show translated, save English */}
+      <Select label={t("cp.s2.country")}
+        value={d.country ? lbl("countries", d.country) : ""}
+        onChange={handleCountryChange}
         options={countryOptions} />
-     
-{/* State + District */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
 
-  {stateList.length > 0 ? (
-    <Select
-      label={t("cp.s2.currentState")}
-      value={d.currentState}
-      onChange={handleStateChange}
-      options={stateList}
-      placeholder="Select state…"
-    />
-  ) : (
-    <Input
-      label={t("cp.s2.currentState")}
-      placeholder={t("cp.s2.currentStatePh")}
-      value={d.currentState}
-      onChange={e => set("currentState", e.target.value)}
-    />
-  )}
-
-  <Select
-    label={t("cp.s2.district")}
-    value={d.district}
-    onChange={handleDistrictChange}
-    options={districtList}
-  />
-
-</div>
-
-{/* Taluka + City */}
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-
-  <Select
-    label={t("cp.s2.taluka")}
-    value={d.taluka}
-    onChange={e => set("taluka", e.target.value)}
-    options={talukaList}
-  />
-
-  {cityList.length > 0 ? (
-    <Select
-      label={t("cp.s2.currentCity")}
-      required
-      value={d.currentCity}
-      onChange={e => set("currentCity", e.target.value)}
-      options={cityList}
-      placeholder="Select city…"
-    />
-  ) : (
-    <Input
-      label={t("cp.s2.currentCity")}
-      required
-      placeholder={t("cp.s2.currentCityPh")}
-      value={d.currentCity}
-      onChange={e => set("currentCity", e.target.value)}
-    />
-  )}
-
-</div>
-    
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-
-  <Input
-    label={t("cp.s2.birthTime")}
-    type="time"
-    value={d.birthTime}
-    onChange={e => {
-      const formattedTime = formatTimeTo12Hour(e.target.value);
-      set("birthTime", formattedTime);
-    }}
-  />
-
-  <Input
-    label={t("cp.s2.pincode")}
-    placeholder={t("cp.s2.pincodePh")}
-    value={d.pincode}
-    onChange={e => {
-      const value = e.target.value.replace(/\D/g, "").slice(0, 6);
-      set("pincode", value);
-    }}
-  />
-
-</div>
+      {/* State + District */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.rashi")} value={d.rashi} onChange={e => set("rashi", e.target.value)}
-          options={rashiOptions} />
-        <Select label={t("cp.s2.nakshatra")} value={d.nakshatra} onChange={e => set("nakshatra", e.target.value)}
-          options={nakshatraOptions} />
+        <Select label={t("cp.s2.currentState")}
+          value={d.currentState ? lbl("states", d.currentState) : ""}
+          onChange={handleStateChange}
+          options={stateList.map(s => lbl("states", s))}
+          placeholder="Select state…" />
+
+        <Select label={t("cp.s2.district")}
+          value={d.district ? lbl("districts", d.district) : ""}
+          onChange={e => {
+            // reverse: find English key from translated label
+            const enVal = districtList.find(en => lbl("districts", en) === e.target.value) || e.target.value;
+            set("district", enVal);
+            set("taluka", "");
+          }}
+          options={districtList.map(d => lbl("districts", d))} />
+      </div>
+
+      {/* Taluka + City */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Select label={t("cp.s2.taluka")}
+          value={d.taluka ? lbl("talukas", d.taluka) : ""}
+          onChange={e => {
+            const enVal = talukaList.find(en => lbl("talukas", en) === e.target.value) || e.target.value;
+            set("taluka", enVal);
+          }}
+          options={talukaList.map(t => lbl("talukas", t))} />
+
+        {cityList.length > 0 ? (
+          <Select label={t("cp.s2.currentCity")} required
+            value={d.currentCity ? lbl("districts", d.currentCity) : ""}
+            onChange={e => {
+              const enVal = cityList.find(en => lbl("districts", en) === e.target.value) || e.target.value;
+              set("currentCity", enVal);
+            }}
+            options={cityList.map(c => lbl("districts", c))}
+            placeholder="Select city…" />
+        ) : (
+          <Input label={t("cp.s2.currentCity")} required
+            placeholder={t("cp.s2.currentCityPh")} value={d.currentCity}
+            onChange={e => set("currentCity", e.target.value)} />
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Input label={t("cp.s2.birthTime")} type="time" value={d.birthTime}
+          onChange={e => set("birthTime", formatTimeTo12Hour(e.target.value))} />
+        <Input label={t("cp.s2.pincode")} placeholder={t("cp.s2.pincodePh")} value={d.pincode}
+          onChange={e => set("pincode", e.target.value.replace(/\D/g, "").slice(0, 6))} />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Select label={t("cp.s2.rashi")} value={d.rashi}
+          onChange={e => set("rashi", e.target.value)} options={rashiOptions} />
+        <Select label={t("cp.s2.nakshatra")} value={d.nakshatra}
+          onChange={e => set("nakshatra", e.target.value)} options={nakshatraOptions} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s2.gotra")} placeholder={t("cp.s2.gotraPh")} value={d.gotra} onChange={e => set("gotra", e.target.value)} />
-        <Select label={t("cp.s2.manglik")} value={d.manglik} onChange={e => set("manglik", e.target.value)}
-          options={manglikOptions} />
+        <Input label={t("cp.s2.gotra")} placeholder={t("cp.s2.gotraPh")} value={d.gotra}
+          onChange={e => set("gotra", e.target.value)} />
+        <Select label={t("cp.s2.manglik")} value={d.manglik}
+          onChange={e => set("manglik", e.target.value)} options={manglikOptions} />
       </div>
     </div>
   );
