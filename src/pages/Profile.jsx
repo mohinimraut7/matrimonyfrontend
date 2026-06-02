@@ -189,24 +189,22 @@ export default function Profile() {
                     {t("profile.labels.siblings")}
                   </p>
 
-                  <p className="text-[0.85rem] font-semibold text-[#1c1917]">
-                    {p.siblings
-                      ? `${p.siblings} ${
-                          t("profile.labels.siblings")
-                        } · ${p.siblingsMarried || "—"}`
-                      : "—"}
-                  </p>
+                 {p.siblings
+                ? `${p.siblings} ${t("profile.labels.siblings")} · ${t("profile.labels.married")}: ${p.siblingsMarried || "—"}`
+                : "—"}
                 </div>
                 </div>
-                <InfoGrid items={[
-                  { label: t("profile.labels.familyType"),   value: p.familyType },
+               <InfoGrid items={[
+                  { label: t("profile.labels.familyType"), value: p.familyType },
                   { label: t("profile.labels.familyValues"), value: p.familyValues },
                   { label: t("profile.labels.familyStatus"), value: p.familyStatus },
-                  { label: t("profile.labels.nativePlace"),  value: p.familyLocation },
+                  { label: t("profile.labels.nativePlace"), value: p.familyLocation },
+
                   { label: t("profile.labels.fatherDistrict"), value: p.fatherDistrict },
                   { label: t("profile.labels.fatherTaluka"), value: p.fatherTaluka },
                   { label: t("profile.labels.fatherVillage"), value: p.fatherVillage },
                   { label: t("profile.labels.fatherRelativeSurname"), value: p.fatherRelativeSurname },
+
                   { label: t("profile.labels.motherDistrict"), value: p.motherDistrict },
                   { label: t("profile.labels.motherTaluka"), value: p.motherTaluka },
                   { label: t("profile.labels.motherVillage"), value: p.motherVillage },
@@ -296,8 +294,7 @@ export default function Profile() {
                     { label: t("profile.labels.partnerLocation"),  value: p.partnerLocation },
                     { label: t("profile.labels.partnerDiet"),      value: p.partnerDiet },
                     { label: t("profile.labels.partnerManglik"),   value: p.partnerManglik },
-                    { label: t("profile.labels.preferredSurname"), value: p.preferredSurname },
-                  ]} />
+                    { label: t("profile.labels.preferredSurname"), value: p.preferredSurnames },                  ]} />
                   {p.partnerDesc && (
                     <>
                       <div className="h-px bg-[#f0ede9] my-4" />

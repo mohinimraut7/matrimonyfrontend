@@ -1273,8 +1273,7 @@ function Step2({ d, set, t }) {
   const nakshatraOptions    = t("cp.options.nakshatra",    { returnObjects: true });
   const manglikOptions      = t("cp.options.manglik",      { returnObjects: true });
 
-  // country options from i18n but value saved as English
-  // We need reverse map: translated label → English value
+
   const enCountries = ["India"];
   const handleCountryChange = e => {
     const idx = countryOptions.indexOf(e.target.value);
@@ -1363,8 +1362,12 @@ function Step2({ d, set, t }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s2.birthTime")} type="time" value={d.birthTime}
-          onChange={e => set("birthTime", formatTimeTo12Hour(e.target.value))} />
+        <Input
+          label={t("cp.s2.birthTime")}
+          type="time"
+          value={d.birthTime}
+          onChange={e => set("birthTime", e.target.value)}
+        />
         <Input label={t("cp.s2.pincode")} placeholder={t("cp.s2.pincodePh")} value={d.pincode}
           onChange={e => set("pincode", e.target.value.replace(/\D/g, "").slice(0, 6))} />
       </div>

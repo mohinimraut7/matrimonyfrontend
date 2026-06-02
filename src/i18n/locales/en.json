@@ -378,7 +378,23 @@
       "motherTongue": "Mother Tongue",
       "nationality": "Nationality",
       "location": "Location",
-      "mobile": "Mobile"
+      "mobile": "Mobile",
+      "fatherDistrict": "Father's District",
+    "fatherTaluka": "Father's Taluka",
+    "fatherVillage": "Father's Village",
+    "fatherRelativeSurname": "Father's Relative Surname",
+
+    "motherDistrict": "Mother's District",
+    "motherTaluka": "Mother's Taluka",
+    "motherVillage": "Mother's Village",
+    "motherRelativeSurname": "Mother's Relative Surname",
+
+    "district": "District",
+    "taluka": "Taluka",
+    "pincode": "Pincode",
+
+    "preferredSurname": "Preferred Surnames",
+    "married": "Married"
     }
   },
   "loginModal": {
