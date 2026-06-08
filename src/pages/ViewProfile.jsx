@@ -409,6 +409,23 @@ function SectionCard({ icon, title, children }) {
   );
 }
 
+function formatHeight(raw) {
+  if (!raw) return "";
+  const parts = String(raw).split("-");
+  const ft = parts[0];
+  const inch = parts[1];
+  if (!ft) return "";
+  if (inch !== undefined && inch !== "" && inch !== "0") return `${ft}'${inch}`;
+  return `${ft}`;
+}
+
+function formatWeight(raw) {
+  if (!raw) return "";
+  const str = String(raw).trim();
+  if (str.toLowerCase().includes("kg")) return str; // already has kg
+  return `${str} kg`;
+}
+
 export default function ViewProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -435,8 +452,8 @@ export default function ViewProfile() {
             : u.fullName || u.userName,          
           age:             u.dob ? Math.floor((new Date() - new Date(u.dob)) / 31557600000) : null,
           dob:             u.dob ? new Date(u.dob).toLocaleDateString("en-IN") : "",
-          height:          u.height || "",
-          weight:          u.weight || "",
+          height: u.height || "",
+          weight: u.weight || "",
           bodyType:        u.bodyType || "",
           complexion:      u.complexion || "",
           gender:          u.gender || "",
@@ -473,10 +490,6 @@ export default function ViewProfile() {
           fatherOccupation: u.fatherOccupation || "",
           motherName:      u.motherName || "",
           motherOccupation: u.motherOccupation || "",
-          brothers:        u.brothers !== undefined ? `${u.brothers}` : "",
-          sisters:         u.sisters !== undefined ? `${u.sisters}` : "",
-          brothersMarried: u.brothersMarried !== undefined ? `${u.brothersMarried}` : "",
-          sistersMarried:  u.sistersMarried !== undefined ? `${u.sistersMarried}` : "",
           familyType:      u.familyType || "",
           familyValues:    u.familyValues || "",
           familyStatus:    u.familyStatus || "",
@@ -673,8 +686,8 @@ export default function ViewProfile() {
             <SectionCard icon={<User size={14} />} title={t("viewProfile.basicDetailsTitle")}>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
               <DetailItem label={t("viewProfile.labels.dob")}           value={profile.dob} />
-              <DetailItem label={t("viewProfile.labels.height")}        value={profile.height} />
-              <DetailItem label={t("viewProfile.labels.weight")}        value={profile.weight} />
+              <DetailItem label={t("viewProfile.labels.height")} value={formatHeight(profile.height)} />
+              <DetailItem label={t("viewProfile.labels.weight")} value={formatWeight(profile.weight)} />
               <DetailItem label={t("viewProfile.labels.bodyType")}      value={profile.bodyType} />
               <DetailItem label={t("viewProfile.labels.complexion")}    value={profile.complexion} />
               <DetailItem label={t("viewProfile.labels.maritalStatus")} value={profile.maritalStatus} />
@@ -687,7 +700,8 @@ export default function ViewProfile() {
               <DetailItem label={t("viewProfile.labels.country")}       value={profile.country} />  
               <DetailItem label={t("viewProfile.labels.district")} value={profile.district} />
               <DetailItem label={t("viewProfile.labels.taluka")} value={profile.taluka} />
-              <DetailItem label={t("viewProfile.labels.pincode")} value={profile.pincode} />        
+              <DetailItem label={t("viewProfile.labels.pincode")} value={profile.pincode} />     
+              <DetailItem label={t("viewProfile.labels.caste")} value={profile.caste}/>   
               </div>
             </SectionCard>
 
@@ -696,7 +710,24 @@ export default function ViewProfile() {
               <SectionCard icon={<span className="text-sm">🔯</span>} title={t("viewProfile.astrologyTitle")}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
                 <DetailItem label={t("viewProfile.labels.birthCity")}  value={profile.birthCity} />
-                <DetailItem label={t("viewProfile.labels.birthTime")}  value={profile.birthTime} />
+                <DetailItem
+                  label={t("viewProfile.labels.birthTime")}
+                  value={
+                    profile.birthTime
+                      ? (() => {
+                          let [hours, minutes] = profile.birthTime.split(":");
+
+                          hours = parseInt(hours, 10);
+
+                          const ampm = hours >= 12 ? "PM" : "AM";
+
+                          hours = hours % 12 || 12;
+
+                          return `${hours}:${minutes} ${ampm}`;
+                        })()
+                      : ""
+                  }
+                />
                 <DetailItem label={t("viewProfile.labels.rashi")}      value={profile.rashi} />
                 <DetailItem label={t("viewProfile.labels.nakshatra")}  value={profile.nakshatra} />
                 <DetailItem label={t("viewProfile.labels.gotra")}      value={profile.gotra} />
@@ -705,17 +736,7 @@ export default function ViewProfile() {
               </SectionCard>
             )}
 
-            {/* Religion */}
-            <SectionCard icon={<span className="text-sm">🕌</span>} title={t("viewProfile.religionTitle")}>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-                <DetailItem label={t("viewProfile.labels.religion")}           value={profile.religion} />
-                <DetailItem label={t("viewProfile.labels.caste")}              value={profile.caste} />
-                <DetailItem label={t("viewProfile.labels.subCaste")}           value={profile.subCaste} />
-                <DetailItem label={t("viewProfile.labels.casteNoBar")}         value={profile.casteNoBar} />
-                <DetailItem label={t("viewProfile.labels.religiousPractice")}  value={profile.religiousPractice} />
-                <DetailItem label={t("viewProfile.labels.community")}          value={profile.community} />
-              </div>
-            </SectionCard>
+            
 
             {/* Professional */}
             <SectionCard icon={<Briefcase size={14} />} title={t("viewProfile.professionalTitle")}>
@@ -780,10 +801,8 @@ export default function ViewProfile() {
                 <DetailItem label={t("viewProfile.labels.fatherOccupation")}  value={profile.fatherOccupation} />
                 <DetailItem label={t("viewProfile.labels.motherName")}        value={profile.motherName} />
                 <DetailItem label={t("viewProfile.labels.motherOccupation")}  value={profile.motherOccupation} />
-                <DetailItem label={t("viewProfile.labels.brothers")}          value={profile.brothers} />
-                <DetailItem label={t("viewProfile.labels.brothersMarried")}   value={profile.brothersMarried} />
-                <DetailItem label={t("viewProfile.labels.sisters")}           value={profile.sisters} />
-                <DetailItem label={t("viewProfile.labels.sistersMarried")}    value={profile.sistersMarried} />
+                <DetailItem label={t("viewProfile.labels.siblings")} value={profile.siblings}/>
+                <DetailItem label={t("viewProfile.labels.married")} value={profile.siblingsMarried} />
                 <DetailItem label={t("viewProfile.labels.familyType")}        value={profile.familyType} />
                 <DetailItem label={t("viewProfile.labels.familyValues")}      value={profile.familyValues} />
                 <DetailItem label={t("viewProfile.labels.familyStatus")}      value={profile.familyStatus} />
@@ -804,7 +823,14 @@ export default function ViewProfile() {
               <SectionCard icon={<Heart size={14} />} title={t("viewProfile.partnerTitle")}>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
                   <DetailItem label={t("viewProfile.labels.ageRange")}        value={profile.partnerAgeMin && profile.partnerAgeMax ? `${profile.partnerAgeMin} – ${profile.partnerAgeMax}` : ""} />
-                  <DetailItem label={t("viewProfile.labels.heightRange")}    value={profile.partnerHeightMin && profile.partnerHeightMax ? `${profile.partnerHeightMin} – ${profile.partnerHeightMax}` : ""} />
+                  <DetailItem
+                        label={t("viewProfile.labels.heightRange")}
+                        value={
+                          profile.partnerHeightMin && profile.partnerHeightMax
+                            ? `${formatHeight(profile.partnerHeightMin)} – ${formatHeight(profile.partnerHeightMax)}`
+                            : ""
+                        }
+                  />                  
                   <DetailItem label={t("viewProfile.labels.partnerMaritalStatus")} value={profile.partnerMaritalStatus} />
                   <DetailItem label={t("viewProfile.labels.partnerReligion")}      value={profile.partnerReligion} />
                   <DetailItem label={t("viewProfile.labels.partnerCaste")}         value={profile.partnerCaste} />

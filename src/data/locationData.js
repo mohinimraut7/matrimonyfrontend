@@ -1,520 +1,158 @@
-export const LOCATION_DATA = {
-  "India": {
-    "states": [
-      "Maharashtra"
-    ],
-    "districts": {
-      "Maharashtra": [
-        "Ahmednagar",
-        "Akola",
-        "Amravati",
-        "Beed",
-        "Bhandara",
-        "Buldhana",
-        "Chandrapur",
-        "Chhatrapati Sambhajinagar",
-        "Dharashiv",
-        "Dhule",
-        "Gadchiroli",
-        "Gondia",
-        "Hingoli",
-        "Jalgaon",
-        "Jalna",
-        "Kolhapur",
-        "Latur",
-        "Mumbai City (District)",
-        "Mumbai Suburban (District)",
-        "Nagpur",
-        "Nanded",
-        "Nandurbar",
-        "Nashik",
-        "Palghar",
-        "Parbhani",
-        "Pune",
-        "Raigad",
-        "Ratnagiri",
-        "Sangli",
-        "Satara",
-        "Sindhudurg",
-        "Solapur",
-        "Thane",
-        "Wardha",
-        "Washim",
-        "Yavatmal"
+export const locationData = {
+  India: {
+    states: ["Maharashtra"],
+
+    districts: {
+      Maharashtra: [
+        "Ahmednagar", "Akola", "Amravati", "Beed", "Bhandara", "Buldhana",
+        "Chandrapur", "Chhatrapati Sambhajinagar", "Dharashiv", "Dhule",
+        "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur",
+        "Latur", "Mumbai City (District)", "Mumbai Suburban (District)",
+        "Nagpur", "Nanded", "Nandurbar", "Nashik", "Palghar", "Parbhani",
+        "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg",
+        "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"
       ]
     },
-    "talukas": {
-      "Ahmednagar": [
-        "Akole",
-        "Jamkhed",
-        "Karjat",
-        "Kopargaon",
-        "Nagar",
-        "Nevasa",
-        "Parner",
-        "Pathardi",
-        "Rahata",
-        "Rahuri",
-        "Sangamner",
-        "Shevgaon",
-        "Shrigonda",
-        "Shrirampur"
+
+    talukas: {
+      Ahmednagar: [
+        "Akole", "Jamkhed", "Karjat", "Kopargaon", "Nagar", "Nevasa",
+        "Parner", "Pathardi", "Rahata", "Rahuri", "Sangamner", "Shevgaon",
+        "Shrigonda", "Shrirampur"
       ],
-      "Akola": [
-        "Akola",
-        "Akot",
-        "Balapur",
-        "Barshitakli",
-        "Murtijapur",
-        "Patur",
-        "Telhara"
+      Akola: [
+        "Akola", "Akot", "Balapur", "Barshitakli", "Murtijapur", "Patur", "Telhara"
       ],
-      "Amravati": [
-        "Achalpur",
-        "Amravati",
-        "Anjangaon S",
-        "Bhatkuli",
-        "Chandur Bz",
-        "Chandur Ril",
-        "Chikhaldara",
-        "Daryapur",
-        "Dhamangaon Ril",
-        "Dharni",
-        "Morshi",
-        "Nandgaon Kh",
-        "Tiwsa",
-        "Warud"
+      Amravati: [
+        "Achalpur", "Amravati", "Anjangaon S", "Bhatkuli", "Chandur Bz",
+        "Chandur Ril", "Chikhaldara", "Daryapur", "Dhamangaon Ril", "Dharni",
+        "Morshi", "Nandgaon Kh", "Tiwsa", "Warud"
       ],
-      "Beed": [
-        "Ambajogai",
-        "Ashti",
-        "Beed",
-        "Dharur",
-        "Georai",
-        "Kaij",
-        "Majalgaon",
-        "Parali V .",
-        "Patoda",
-        "Shirur ( Ka )",
-        "Wadwani"
+      Beed: [
+        "Ambajogai", "Ashti", "Beed", "Dharur", "Georai", "Kaij", "Majalgaon",
+        "Parali V .", "Patoda", "Shirur ( Ka )", "Wadwani"
       ],
-      "Bhandara": [
-        "Bhandara",
-        "Lakhandur",
-        "Lakhani",
-        "Mohadi",
-        "Pauni",
-        "Sakoli",
-        "Tumsar"
+      Bhandara: [
+        "Bhandara", "Lakhandur", "Lakhani", "Mohadi", "Pauni", "Sakoli", "Tumsar"
       ],
-      "Buldhana": [
-        "Buldana",
-        "Chikhli",
-        "D. Raja",
-        "Jalgaonjamod",
-        "Khamgaon",
-        "Lonar",
-        "Malkapur",
-        "Mehkar",
-        "Motala",
-        "Nandura",
-        "Sangrampur",
-        "Shegaon",
+      Buldhana: [
+        "Buldana", "Chikhli", "D. Raja", "Jalgaonjamod", "Khamgaon", "Lonar",
+        "Malkapur", "Mehkar", "Motala", "Nandura", "Sangrampur", "Shegaon",
         "Sindkhedraja"
       ],
-      "Chandrapur": [
-        "Ballarpur",
-        "Bhadrawati",
-        "Brahmapuri",
-        "Chandrapur",
-        "Chimur",
-        "Gondpipri",
-        "Jiwati",
-        "Korpana",
-        "Mul",
-        "Nagbhid",
-        "Pombhurna",
-        "Rajura",
-        "Saoli",
-        "Sindewahi",
-        "Warora"
+      Chandrapur: [
+        "Ballarpur", "Bhadrawati", "Brahmapuri", "Chandrapur", "Chimur",
+        "Gondpipri", "Jiwati", "Korpana", "Mul", "Nagbhid", "Pombhurna",
+        "Rajura", "Saoli", "Sindewahi", "Warora"
       ],
       "Chhatrapati Sambhajinagar": [
-        "Chhatrapati Sambhajinagar",
-        "Gangapur",
-        "Kanand",
-        "Khultabad",
-        "Paithan",
-        "Phulambri",
-        "Sillod",
-        "Soegaon",
-        "Vaijapur"
+        "Chhatrapati Sambhajinagar", "Gangapur", "Kanand", "Khultabad",
+        "Paithan", "Phulambri", "Sillod", "Soegaon", "Vaijapur"
       ],
-      "Dharashiv": [
-        "Bhoom",
-        "Kalamb",
-        "Lohara",
-        "Omerga",
-        "Dharashiv",
-        "Paranda",
-        "Tuljapur",
-        "Washi"
+      Dharashiv: [
+        "Bhoom", "Kalamb", "Lohara", "Omerga", "Dharashiv", "Paranda",
+        "Tuljapur", "Washi"
       ],
-      "Dhule": [
-        "Dhule",
-        "Sakri",
-        "Shindkhede",
-        "Shirpur"
+      Dhule: ["Dhule", "Sakri", "Shindkhede", "Shirpur"],
+      Gadchiroli: [
+        "Aheri", "Armori", "Bhamaragad", "Chamorshi", "Desaiganj (Wadsa)",
+        "Dhanora", "Etapalli", "Gadchiroli", "Korchi", "Kurkheda",
+        "Mulchera", "Sironcha"
       ],
-      "Gadchiroli": [
-        "Aheri",
-        "Armori",
-        "Bhamaragad",
-        "Chamorshi",
-        "Desaiganj (Wadsa)",
-        "Dhanora",
-        "Etapalli",
-        "Gadchiroli",
-        "Korchi",
-        "Kurkheda",
-        "Mulchera",
-        "Sironcha"
+      Gondia: [
+        "Amgaon", "Arjuni Morgaon", "Deori", "Gondia", "Goregaon",
+        "Sadak Arjuni", "Salekasa", "Tirora"
       ],
-      "Gondia": [
-        "Amgaon",
-        "Arjuni Morgaon",
-        "Deori",
-        "Gondia",
-        "Goregaon",
-        "Sadak Arjuni",
-        "Salekasa",
-        "Tirora"
+      Hingoli: ["Aundha Nagnath", "Basmat", "Hingoli", "Kalamnuri", "Sengaon"],
+      Jalgaon: [
+        "Amalner", "Bhadgaon", "Bhusawal", "Bodwad", "Chalisgaon", "Chopda",
+        "Dharangaon", "Erandol", "Jalgaon", "Jamner", "Muktainagar", "Pachora",
+        "Parola", "Raver", "Yawal"
       ],
-      "Hingoli": [
-        "Aundha Nagnath",
-        "Basmat",
-        "Hingoli",
-        "Kalamnuri",
-        "Sengaon"
+      Jalna: [
+        "Ambad", "Badnapur", "Bhokardan", "Ghansawangi", "Jafrabad", "Jalna",
+        "Mantha", "Partur"
       ],
-      "Jalgaon": [
-        "Amalner",
-        "Bhadgaon",
-        "Bhusawal",
-        "Bodwad",
-        "Chalisgaon",
-        "Chopda",
-        "Dharangaon",
-        "Erandol",
-        "Jalgaon",
-        "Jamner",
-        "Muktainagar",
-        "Pachora",
-        "Parola",
-        "Raver",
-        "Yawal"
+      Kolhapur: [
+        "Ajara", "Bhudargad", "Chandgad", "Gadhinglaj", "Gagan Bavada",
+        "Hatkanangale", "Kagal", "Karveer", "Panhala", "Radhanagari",
+        "Shahuwadi", "Shirol"
       ],
-      "Jalna": [
-        "Ambad",
-        "Badnapur",
-        "Bhokardan",
-        "Ghansawangi",
-        "Jafrabad",
-        "Jalna",
-        "Mantha",
-        "Partur"
+      Latur: [
+        "Ahemadpur", "Ausa", "Chakur", "Deoni", "Jalkot", "Latur", "Nilanga",
+        "Renapur", "Shirur Anantpal", "Udgir"
       ],
-      "Kolhapur": [
-        "Ajara",
-        "Bhudargad",
-        "Chandgad",
-        "Gadhinglaj",
-        "Gagan Bavada",
-        "Hatkanangale",
-        "Kagal",
-        "Karveer",
-        "Panhala",
-        "Radhanagari",
-        "Shahuwadi",
-        "Shirol"
+      "Mumbai City (District)": ["Mumbai"],
+      "Mumbai Suburban (District)": ["Andheri", "Borivali", "Kurla"],
+      Nagpur: [
+        "Bhivapur", "Hingna", "Kalmeshwar", "Kamptee", "Katol", "Kuhi", "Mouda",
+        "Nagpur Urban", "Nagpur Rural", "Narkhed", "Parseoni", "Ramtek",
+        "Saoner", "Umred"
       ],
-      "Latur": [
-        "Ahemadpur",
-        "Ausa",
-        "Chakur",
-        "Deoni",
-        "Jalkot",
-        "Latur",
-        "Nilanga",
-        "Renapur",
-        "Shirur Anantpal",
-        "Udgir"
+      Nanded: [
+        "Ardhapur", "Bhokar", "Biloli", "Deglur", "Dharmabad", "Hadgaon",
+        "Himayatnagar", "Kandhar", "Kinwat", "Loha", "Mahur", "Mudkhed",
+        "Mukhed", "Naigaon (Kh)", "Nanded", "Umri"
       ],
-      "Mumbai City (District)": [
-        "Mumbai"
+      Nandurbar: [
+        "Akarani", "Akkalkuwa", "Nandurbar", "Navapur", "Shahada", "Taloda"
       ],
-      "Mumbai Suburban (District)": [
-        "Andheri",
-        "Borivali",
-        "Kurla"
+      Nashik: [
+        "Baglan", "Chandwad", "Deola", "Dindori", "Igatpuri", "Kalwan",
+        "Malegaon", "Nandgaon", "Nashik", "Niphad", "Peth", "Sinnar",
+        "Surgana", "Trimbak", "Yeola"
       ],
-      "Nagpur": [
-        "Bhivapur",
-        "Hingna",
-        "Kalmeshwar",
-        "Kamptee",
-        "Katol",
-        "Kuhi",
-        "Mouda",
-        "Nagpur Urban",
-        "Nagpur Rural",
-        "Narkhed",
-        "Parseoni",
-        "Ramtek",
-        "Saoner",
-        "Umred"
+      Palghar: [
+        "Dahanu", "Jawhar", "Mokhada", "Palghar", "Talasari", "Vasai",
+        "Vikramgad", "Wada"
       ],
-      "Nanded": [
-        "Ardhapur",
-        "Bhokar",
-        "Biloli",
-        "Deglur",
-        "Dharmabad",
-        "Hadgaon",
-        "Himayatnagar",
-        "Kandhar",
-        "Kinwat",
-        "Loha",
-        "Mahur",
-        "Mudkhed",
-        "Mukhed",
-        "Naigaon (Kh)",
-        "Nanded",
-        "Umri"
+      Parbhani: [
+        "Gangakhed", "Jintur", "Manwat", "Palam", "Parbhani", "Pathri",
+        "Purna", "Sailu", "Sonpeth"
       ],
-      "Nandurbar": [
-        "Akarani",
-        "Akkalkuwa",
-        "Nandurbar",
-        "Navapur",
-        "Shahada",
-        "Taloda"
-      ],
-      "Nashik": [
-        "Baglan",
-        "Chandwad",
-        "Deola",
-        "Dindori",
-        "Igatpuri",
-        "Kalwan",
-        "Malegaon",
-        "Nandgaon",
-        "Nashik",
-        "Niphad",
-        "Peth",
-        "Sinnar",
-        "Surgana",
-        "Trimbak",
-        "Yeola"
-      ],
-      "Palghar": [
-        "Dahanu",
-        "Jawhar",
-        "Mokhada",
-        "Palghar",
-        "Talasari",
-        "Vasai",
-        "Vikramgad",
-        "Wada"
-      ],
-      "Parbhani": [
-        "Gangakhed",
-        "Jintur",
-        "Manwat",
-        "Palam",
-        "Parbhani",
-        "Pathri",
-        "Purna",
-        "Sailu",
-        "Sonpeth"
-      ],
-      "Pune": [
-        "Ambegaon",
-        "Baramati",
-        "Bhor",
-        "Daund",
-        "Haveli",
-        "Indapur",
-        "Junnar",
-        "Khed",
-        "Maval",
-        "Mulshi",
-        "Pune City",
-        "Purandar",
-        "Shirur",
-        "Rajgad",
+      Pune: [
+        "Ambegaon", "Baramati", "Bhor", "Daund", "Haveli", "Indapur", "Junnar",
+        "Khed", "Maval", "Mulshi", "Pune City", "Purandar", "Shirur", "Rajgad",
         "Velhe"
       ],
-      "Raigad": [
-        "Alibag",
-        "Karjat",
-        "Khalapur",
-        "Mahad",
-        "Mangaon",
-        "Mhasala",
-        "Murud",
-        "Panvel",
-        "Pen",
-        "Poladpur",
-        "Roha",
-        "Shrivardhan",
-        "Sudhagad",
-        "Tala",
+      Raigad: [
+        "Alibag", "Karjat", "Khalapur", "Mahad", "Mangaon", "Mhasala", "Murud",
+        "Panvel", "Pen", "Poladpur", "Roha", "Shrivardhan", "Sudhagad", "Tala",
         "Uran"
       ],
-      "Ratnagiri": [
-        "Chipalun",
-        "Dapoli",
-        "Guhagar",
-        "Khed",
-        "Lanja",
-        "Mandangad",
-        "Rajapur",
-        "Ratnagiri",
-        "Sangmeshwar"
+      Ratnagiri: [
+        "Chipalun", "Dapoli", "Guhagar", "Khed", "Lanja", "Mandangad",
+        "Rajapur", "Ratnagiri", "Sangmeshwar"
       ],
-      "Sangli": [
-        "Atpadi",
-        "Jath",
-        "Kadegaon",
-        "Kavathemahankal",
-        "Khanapur-Vita",
-        "Miraj",
-        "Palus",
-        "Shirala",
-        "Tasgaon",
-        "Valva-Islampur"
+      Sangli: [
+        "Atpadi", "Jath", "Kadegaon", "Kavathemahankal", "Khanapur-Vita",
+        "Miraj", "Palus", "Shirala", "Tasgaon", "Valva-Islampur"
       ],
-      "Satara": [
-        "Jawali",
-        "Karad",
-        "Khandala",
-        "Khatav",
-        "Koregaon",
-        "Mahabaleshwar",
-        "Man",
-        "Patan",
-        "Phaltan",
-        "Satara",
-        "Wai"
+      Satara: [
+        "Jawali", "Karad", "Khandala", "Khatav", "Koregaon", "Mahabaleshwar",
+        "Man", "Patan", "Phaltan", "Satara", "Wai"
       ],
-      "Sindhudurg": [
-        "Deogad",
-        "Dodamarg",
-        "Kankavali",
-        "Kudal",
-        "Malvan",
-        "Sawantwadi",
-        "Vaibhavawadi",
-        "Vengurla"
+      Sindhudurg: [
+        "Deogad", "Dodamarg", "Kankavali", "Kudal", "Malvan", "Sawantwadi",
+        "Vaibhavawadi", "Vengurla"
       ],
-      "Solapur": [
-        "Akkalkot",
-        "Barshi",
-        "Karmala",
-        "Madha",
-        "Malshiras",
-        "Mangalvedhe",
-        "Mohol",
-        "Pandharpur",
-        "Sangola",
-        "Solapur North",
-        "South Solapur"
+      Solapur: [
+        "Akkalkot", "Barshi", "Karmala", "Madha", "Malshiras", "Mangalvedhe",
+        "Mohol", "Pandharpur", "Sangola", "Solapur North", "South Solapur"
       ],
-      "Thane": [
-        "Ambernath",
-        "Bhiwandi",
-        "Kalyan",
-        "Murbad",
-        "Shahapur",
-        "Ulhasnagar",
+      Thane: [
+        "Ambernath", "Bhiwandi", "Kalyan", "Murbad", "Shahapur", "Ulhasnagar",
         "Thane"
       ],
-      "Wardha": [
-        "Arvi",
-        "Ashti",
-        "Deoli",
-        "Hinganghat",
-        "Karanja",
-        "Samudrapur",
-        "Seloo",
-        "Wardha"
+      Wardha: [
+        "Arvi", "Ashti", "Deoli", "Hinganghat", "Karanja", "Samudrapur",
+        "Seloo", "Wardha"
       ],
-      "Washim": [
-        "Karanja",
-        "Malegaon",
-        "Mangrulpir",
-        "Manora",
-        "Risod",
-        "Washim"
-      ],
-      "Yavatmal": [
-        "Arni",
-        "Babhulgaon",
-        "Darwha",
-        "Digras",
-        "Ghatanji",
-        "Kalamb",
-        "Kelapur",
-        "Mahagaon",
-        "Maregaon",
-        "Ner",
-        "Pusad",
-        "Ralegaon",
-        "Umarkhed",
-        "Wani",
-        "Yavatmal",
-        "Zari Jamni"
-      ]
-    },
-    "cities": {
-      "Maharashtra": [
-        "Ahmednagar",
-        "Akola",
-        "Amravati",
-        "Beed",
-        "Bhandara",
-        "Buldhana",
-        "Chandrapur",
-        "Chhatrapati Sambhajinagar",
-        "Dharashiv",
-        "Dhule",
-        "Gadchiroli",
-        "Gondia",
-        "Hingoli",
-        "Jalgaon",
-        "Jalna",
-        "Kolhapur",
-        "Latur",
-        "Mumbai City (District)",
-        "Mumbai Suburban (District)",
-        "Nagpur",
-        "Nanded",
-        "Nandurbar",
-        "Nashik",
-        "Palghar",
-        "Parbhani",
-        "Pune",
-        "Raigad",
-        "Ratnagiri",
-        "Sangli",
-        "Satara",
-        "Sindhudurg",
-        "Solapur",
-        "Thane",
-        "Wardha",
-        "Washim",
-        "Yavatmal"
+      Washim: ["Karanja", "Malegaon", "Mangrulpir", "Manora", "Risod", "Washim"],
+      Yavatmal: [
+        "Arni", "Babhulgaon", "Darwha", "Digras", "Ghatanji", "Kalamb",
+        "Kelapur", "Mahagaon", "Maregaon", "Ner", "Pusad", "Ralegaon",
+        "Umarkhed", "Wani", "Yavatmal", "Zari Jamni"
       ]
     }
   }

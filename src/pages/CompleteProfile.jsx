@@ -1021,12 +1021,11 @@
 // }
 
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../context/ProfileContext";
-import { LOCATION_DATA } from "../data/locationData";
 import { useTranslation } from "react-i18next";
-import { useRef } from "react"; 
+import { locationData } from "../data/locationData";
 
 
 
@@ -1039,12 +1038,11 @@ const MUTED   = "#9a8c7a";
 const STEPS = (t) => [
   { id: 1, label: t("cp.steps.basic"),     icon: "👤" },
   { id: 2, label: t("cp.steps.personal"),  icon: "🏠" },
-  { id: 3, label: t("cp.steps.religion"),  icon: "🕌" },
-  { id: 4, label: t("cp.steps.family"),    icon: "👨‍👩‍👧" },
-  { id: 5, label: t("cp.steps.education"), icon: "🎓" },
-  { id: 6, label: t("cp.steps.lifestyle"), icon: "🌿" },
-  { id: 7, label: t("cp.steps.partner"),   icon: "💑" },
-  { id: 8, label: t("cp.steps.photos"),    icon: "📸" },
+  { id: 3, label: t("cp.steps.family"),    icon: "👨‍👩‍👧" },
+  { id: 4, label: t("cp.steps.education"), icon: "🎓" },
+  { id: 5, label: t("cp.steps.lifestyle"), icon: "🌿" },
+  { id: 6, label: t("cp.steps.partner"),   icon: "💑" },
+  { id: 7, label: t("cp.steps.photos"),    icon: "📸" },
 ];
 
 /* ─── small shared primitives ────────────────────────────────── */
@@ -1082,8 +1080,16 @@ function Input({ label, required, type = "text", placeholder, value, onChange, .
   );
 }
 
-function Select({ label, required, value, onChange, options, placeholder }) {
+function Select({ label, required, value, onChange, options = [], placeholder, disabled }) {
   const [focus, setFocus] = useState(false);
+
+  // Guard: if options is not an array (t() returned a key string), treat as empty
+  const safeOptions = Array.isArray(options) ? options : [];
+
+  const normalised = safeOptions.map(o =>
+    typeof o === "string" ? { value: o, label: o } : o
+  );
+
   return (
     <div className="mb-4">
       {label && <Label required={required}>{label}</Label>}
@@ -1092,12 +1098,14 @@ function Select({ label, required, value, onChange, options, placeholder }) {
         onChange={onChange}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
+        disabled={disabled}
         style={{
           width: "100%", padding: "9px 13px",
           border: `1.5px solid ${focus ? ACCENT : BORDER}`,
           borderRadius: 9, fontFamily: "'Inter', sans-serif",
           fontSize: "0.83rem", color: value ? DARK : MUTED,
-          outline: "none", cursor: "pointer",
+          outline: "none", cursor: disabled ? "not-allowed" : "pointer",
+          opacity: disabled ? 0.5 : 1,
           transition: "border-color 0.18s", appearance: "none",
           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239a8c7a'/%3E%3C/svg%3E")`,
           backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center",
@@ -1105,7 +1113,11 @@ function Select({ label, required, value, onChange, options, placeholder }) {
         }}
       >
         <option value="">{placeholder || "Select…"}</option>
-        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      {normalised.map(({ value: val, label: lbl, disabled: optDisabled }) => (
+        <option key={val} value={val} disabled={optDisabled}>
+          {lbl}
+        </option>
+      ))}
       </select>
     </div>
   );
@@ -1137,12 +1149,16 @@ function Textarea({ label, required, placeholder, value, onChange, rows = 3 }) {
 }
 
 function Chips({ label, options, selected, onToggle }) {
+  // Guard: if t() returned a key string instead of array, treat as empty
+  const safeOptions = Array.isArray(options) ? options : [];
+  const safeSelected = Array.isArray(selected) ? selected : [];
+
   return (
     <div className="mb-4">
       {label && <Label>{label}</Label>}
       <div className="flex flex-wrap gap-2">
-        {options.map(o => {
-          const active = selected.includes(o);
+        {safeOptions.map(o => {
+          const active = safeSelected.includes(o);
           return (
             <button
               key={o}
@@ -1150,10 +1166,10 @@ function Chips({ label, options, selected, onToggle }) {
               onClick={() => onToggle(o)}
               className="text-[0.78rem] px-3 py-1.5 rounded-full border transition-all duration-150 cursor-pointer"
               style={{
-                background: active ? ACCENT : "white",
-                color: active ? "white" : MUTED,
-                borderColor: active ? ACCENT : BORDER,
-                fontFamily: "'Inter', sans-serif",
+                background:   active ? ACCENT : "white",
+                color:        active ? "white" : MUTED,
+                borderColor:  active ? ACCENT  : BORDER,
+                fontFamily:   "'Inter', sans-serif",
               }}
             >
               {o}
@@ -1167,74 +1183,175 @@ function Chips({ label, options, selected, onToggle }) {
 
 /* ─── step forms ─────────────────────────────────────────────── */
 
+// ── HeightPicker ───────────────────────────────────────────────────────
+function HeightPicker({ value, onChange, label, minValue }) {
+  const feet   = value ? value.split("-")[0] : "";
+  const inches = value ? value.split("-")[1] : "";
+
+  const minFt  = minValue ? Number(minValue.split("-")[0]) : null;
+  const minIn  = minValue ? Number(minValue.split("-")[1]) : null;
+
+  // ── Auto-clear if current value is now invalid due to minValue change ──
+  useEffect(() => {
+    if (!minValue || !value) return;
+    const [curFt, curIn] = value.split("-").map(Number);
+    // If same feet and inches <= min inches → clear
+    if (curFt === minFt && curIn <= minIn) {
+      onChange("");
+    }
+    // If feet < min feet → clear
+    if (curFt < minFt) {
+      onChange("");
+    }
+  }, [minValue]);
+
+  return (
+    <div className="mb-4">
+      {label && <Label>{label}</Label>}
+      <div style={{ display: "flex", gap: 8 }}>
+        <select
+          value={feet}
+          onChange={e => onChange(e.target.value ? `${e.target.value}-${inches || "0"}` : "")}
+          style={{
+            flex: 1, padding: "9px 13px",
+            border: "1.5px solid #ece8e1",
+            borderRadius: 9, fontFamily: "'Inter', sans-serif",
+            fontSize: "0.83rem", color: feet ? "#1c1917" : "#9a8c7a",
+            outline: "none", cursor: "pointer",
+            appearance: "none", background: "white",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239a8c7a'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center",
+            paddingRight: 30,
+          }}
+          onFocus={e => e.target.style.borderColor = "#c2852a"}
+          onBlur={e => e.target.style.borderColor = "#ece8e1"}
+        >
+          <option value="">ft</option>
+          {[4,5,6,7].map(f => (
+            <option key={f} value={f} disabled={minFt !== null && f < minFt}>
+              {f} ft
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={inches}
+          onChange={e => onChange(`${feet || "5"}-${e.target.value}`)}
+          disabled={!feet}
+          style={{
+            flex: 1, padding: "9px 13px",
+            border: "1.5px solid #ece8e1",
+            borderRadius: 9, fontFamily: "'Inter', sans-serif",
+            fontSize: "0.83rem", color: inches !== "" ? "#1c1917" : "#9a8c7a",
+            outline: "none", cursor: feet ? "pointer" : "not-allowed",
+            opacity: feet ? 1 : 0.5,
+            appearance: "none", background: "white",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239a8c7a'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center",
+            paddingRight: 30,
+          }}
+          onFocus={e => e.target.style.borderColor = "#c2852a"}
+          onBlur={e => e.target.style.borderColor = "#ece8e1"}
+        >
+          <option value="">in</option>
+          {[0,1,2,3,4,5,6,7,8,9,10,11].map(i => (
+            <option
+              key={i}
+              value={i}
+              disabled={minFt !== null && Number(feet) === minFt && i <= minIn}
+            >
+              {i} in
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
+// ── Step1 ──────────────────────────────────────────────────────────────
 function Step1({ d, set, t }) {
-  const genderOptions       = t("cp.options.gender",        { returnObjects: true });
-  const maritalOptions      = t("cp.options.maritalStatus", { returnObjects: true });
-  const profileForOptions   = t("cp.options.profileFor",    { returnObjects: true });
-  const bodyTypeOptions     = t("cp.options.bodyType",      { returnObjects: true });
-  const complexionOptions   = t("cp.options.complexion",    { returnObjects: true });
+  const genderOptions     = t("cp.options.gender",        { returnObjects: true });
+  const maritalOptions    = t("cp.options.maritalStatus", { returnObjects: true });
+  const profileForOptions = t("cp.options.profileFor",    { returnObjects: true });
+  const bodyTypeOptions   = t("cp.options.bodyType",      { returnObjects: true });
+  const complexionOptions = t("cp.options.complexion",    { returnObjects: true });
+
+  
 
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s1.firstName")} required placeholder={t("cp.s1.firstNamePh")} value={d.firstName} onChange={e => set("firstName", e.target.value)} />
-        <Input label={t("cp.s1.lastName")}  required placeholder={t("cp.s1.lastNamePh")}  value={d.lastName}  onChange={e => set("lastName",  e.target.value)} />
+        <Input label={t("cp.s1.firstName")} required placeholder={t("cp.s1.firstNamePh")}
+          value={d.firstName} onChange={e => set("firstName", e.target.value)} />
+        <Input label={t("cp.s1.lastName")}  required placeholder={t("cp.s1.lastNamePh")}
+          value={d.lastName}  onChange={e => set("lastName",  e.target.value)} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s1.dob")} required type="date" value={d.dob} onChange={e => set("dob", e.target.value)} />
-        <Select label={t("cp.s1.gender")} required value={d.gender} onChange={e => set("gender", e.target.value)}
+        <Input label={t("cp.s1.dob")} required type="date"
+          value={d.dob} onChange={e => set("dob", e.target.value)} />
+        <Select label={t("cp.s1.gender")} required
+          value={d.gender} onChange={e => set("gender", e.target.value)}
           options={genderOptions} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s1.maritalStatus")} required value={d.maritalStatus} onChange={e => set("maritalStatus", e.target.value)}
+        <Select label={t("cp.s1.maritalStatus")} required
+          value={d.maritalStatus} onChange={e => set("maritalStatus", e.target.value)}
           options={maritalOptions} />
-        <Select label={t("cp.s1.profileFor")} required value={d.profileFor} onChange={e => set("profileFor", e.target.value)}
+        <Select label={t("cp.s1.profileFor")} required
+          value={d.profileFor} onChange={e => set("profileFor", e.target.value)}
           options={profileForOptions} />
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5">
-        <Input
+
+        {/* ── Height: custom scroll picker ── */}
+        <HeightPicker
           label={t("cp.s1.height")}
-          placeholder="5'9"
           value={d.height}
-          onChange={e => {
-            let value = e.target.value.replace(/[^\d]/g, "");
-
-            // Auto format like 5'9
-            if (value.length >= 2) {
-              value = `${value[0]}'${value.slice(1, 2)}`;
-            }
-
-            set("height", value);
-          }}
-          maxLength={3}
+          onChange={(val) => set("height", val)}
         />
 
-        <Input
-          label={t("cp.s1.weight")}
-          placeholder="65 kg"
-          value={d.weight}
-          onChange={e => {
-            // keep only numbers
-            let raw = e.target.value.replace(/[^\d]/g, "");
+        {/* Weight with kg suffix */}
+<div className="mb-4">
+  <Label>{t("cp.s1.weight")}</Label>
+  <div style={{ position: "relative" }}>
+    <input
+      placeholder="80"
+      value={d.weight}
+      onChange={e => set("weight", e.target.value)}
+      style={{
+        width: "100%", padding: "9px 40px 9px 13px",
+        border: "1.5px solid #ece8e1",
+        borderRadius: 9, fontFamily: "'Inter', sans-serif",
+        fontSize: "0.83rem", color: "#1c1917",
+        outline: "none", transition: "border-color 0.18s",
+        background: "white", boxSizing: "border-box",
+      }}
+      onFocus={e => e.target.style.borderColor = "#c2852a"}
+      onBlur={e => e.target.style.borderColor = "#ece8e1"}
+    />
+    <span style={{
+      position: "absolute", right: 13, top: "50%",
+      transform: "translateY(-50%)",
+      fontSize: "0.78rem", color: "#9a8c7a",
+      fontFamily: "'Inter', sans-serif",
+      pointerEvents: "none",
+    }}>
+      kg
+    </span>
+  </div>
+</div>
 
-            // if empty -> completely empty
-            if (!raw) {
-              set("weight", "");
-              return;
-            }
-
-            // otherwise add kg
-            set("weight", `${raw} kg`);
-          }}
-        />
-
-        <Select label={t("cp.s1.bodyType")} value={d.bodyType} onChange={e => set("bodyType", e.target.value)}
+        <Select label={t("cp.s1.bodyType")}
+          value={d.bodyType} onChange={e => set("bodyType", e.target.value)}
           options={bodyTypeOptions} />
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s1.complexion")} value={d.complexion} onChange={e => set("complexion", e.target.value)}
+        <Select label={t("cp.s1.complexion")}
+          value={d.complexion} onChange={e => set("complexion", e.target.value)}
           options={complexionOptions} />
-          
         <Input
           label={t("cp.s1.mobile")}
           required
@@ -1242,338 +1359,438 @@ function Step1({ d, set, t }) {
           placeholder={t("cp.s1.mobilePh")}
           value={d.mobile}
           onChange={e => {
-            // allow only digits & max 10
             const value = e.target.value.replace(/\D/g, "").slice(0, 10);
             set("mobile", value);
           }}
-        /> 
-        </div>
-      <Textarea label={t("cp.s1.about")} required placeholder={t("cp.s1.aboutPh")} value={d.about} onChange={e => set("about", e.target.value)} rows={4} />
+        />
+      </div>
+
+      <Textarea label={t("cp.s1.about")} required
+        placeholder={t("cp.s1.aboutPh")}
+        value={d.about}
+        onChange={e => set("about", e.target.value)}
+        rows={4} />
     </div>
   );
 }
 
-
 function Step2({ d, set, t }) {
-  const labels = t("locationLabels", { returnObjects: true });
+  const indiaData = locationData.India;
 
-  const lbl = (type, enVal) =>
-    (labels && labels[type] && labels[type][enVal]) ? labels[type][enVal] : enVal;
+  const stateList = indiaData.states || [];
 
-  const countryData  = LOCATION_DATA[d.country]  || { states: [], districts: {}, talukas: {}, cities: {} };
-  const stateList    = countryData.states         || [];
-  const districtList = d.currentState ? (countryData.districts[d.currentState] || []) : [];
-  const talukaList   = d.district     ? (countryData.talukas[d.district]        || []) : [];
-  const cityList     = d.currentState ? (countryData.cities[d.currentState]     || []) : [];
+  const districtList =
+    indiaData.districts?.[d.currentState] || [];
 
-  const motherTongueOptions = t("cp.options.motherTongue", { returnObjects: true });
-  const nationalityOptions  = t("cp.options.nationality",  { returnObjects: true });
-  const countryOptions      = t("cp.options.country",      { returnObjects: true });
-  const rashiOptions        = t("cp.options.rashi",        { returnObjects: true });
-  const nakshatraOptions    = t("cp.options.nakshatra",    { returnObjects: true });
-  const manglikOptions      = t("cp.options.manglik",      { returnObjects: true });
+  const talukaList =
+    indiaData.talukas?.[d.district] || [];
 
+  const stateOptions = stateList.map(item => ({
+    value: item,
+    label: t(`locationLabels.${item}`, item),
+  }));
 
-  const enCountries = ["India"];
-  const handleCountryChange = e => {
-    const idx = countryOptions.indexOf(e.target.value);
-    set("country", enCountries[idx] ?? e.target.value);
-    set("currentState", ""); set("district", ""); set("taluka", ""); set("currentCity", "");
-  };
+  const districtOptions = districtList.map(item => ({
+    value: item,
+    label: t(`locationLabels.${item}`, item),
+  }));
 
-  const handleStateChange = e => {
-    // stateList is already English from LOCATION_DATA
-    set("currentState", e.target.value);
-    set("district", ""); set("taluka", ""); set("currentCity", "");
-  };
+  const talukaOptions = talukaList.map(item => ({
+    value: item,
+    label: t(`locationLabels.${item}`, item),
+  }));
 
-  const handleDistrictChange = e => {
-    set("district", e.target.value);
-    set("taluka", "");
-  };
+  const motherTongueOptions =
+    t("cp.options.motherTongue", {
+      returnObjects: true,
+    }) || [];
 
-  const formatTimeTo12Hour = (time) => {
-    if (!time) return "";
-    let [hours, minutes] = time.split(":");
-    hours = parseInt(hours, 10);
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-    return `${hours}:${minutes} ${ampm}`;
-  };
+  const rashiOptions =
+    t("cp.options.rashi", {
+      returnObjects: true,
+    }) || [];
+
+  const nakshatraOptions =
+    t("cp.options.nakshatra", {
+      returnObjects: true,
+    }) || [];
+
+  const manglikOptions =
+    t("cp.options.manglik", {
+      returnObjects: true,
+    }) || [];
 
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.motherTongue")} required value={d.motherTongue}
-          onChange={e => set("motherTongue", e.target.value)} options={motherTongueOptions} />
-        <Select label={t("cp.s2.nationality")} value={d.nationality}
-          onChange={e => set("nationality", e.target.value)} options={nationalityOptions} />
-      </div>
+    <div className="space-y-5">
 
-      {/* Country — show translated, save English */}
-      <Select label={t("cp.s2.country")}
-        value={d.country ? lbl("countries", d.country) : ""}
-        onChange={handleCountryChange}
-        options={countryOptions} />
+      
+        
 
       {/* State + District */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.currentState")}
-          value={d.currentState ? lbl("states", d.currentState) : ""}
-          onChange={handleStateChange}
-          options={stateList.map(s => lbl("states", s))}
-          placeholder="Select state…" />
-
-        <Select label={t("cp.s2.district")}
-          value={d.district ? lbl("districts", d.district) : ""}
-          onChange={e => {
-            // reverse: find English key from translated label
-            const enVal = districtList.find(en => lbl("districts", en) === e.target.value) || e.target.value;
-            set("district", enVal);
+        <Select
+          label={t("cp.s2.currentState")}
+          value={d.currentState}
+          onChange={(e) => {
+            set("currentState", e.target.value);
+            set("district", "");
             set("taluka", "");
           }}
-          options={districtList.map(d => lbl("districts", d))} />
+          options={stateOptions}
+        />
+
+        <Select
+          label={t("cp.s2.district")}
+          value={d.district}
+          onChange={(e) => {
+            set("district", e.target.value);
+            set("taluka", "");
+          }}
+          options={districtOptions}
+          disabled={!d.currentState}
+        />
       </div>
 
       {/* Taluka + City */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.taluka")}
-          value={d.taluka ? lbl("talukas", d.taluka) : ""}
-          onChange={e => {
-            const enVal = talukaList.find(en => lbl("talukas", en) === e.target.value) || e.target.value;
-            set("taluka", enVal);
-          }}
-          options={talukaList.map(t => lbl("talukas", t))} />
+        <Select
+          label={t("cp.s2.taluka")}
+          value={d.taluka}
+          onChange={(e) => set("taluka", e.target.value)}
+          options={talukaOptions}
+          disabled={!d.district}
+        />
 
-        {cityList.length > 0 ? (
-          <Select label={t("cp.s2.currentCity")} required
-            value={d.currentCity ? lbl("districts", d.currentCity) : ""}
-            onChange={e => {
-              const enVal = cityList.find(en => lbl("districts", en) === e.target.value) || e.target.value;
-              set("currentCity", enVal);
-            }}
-            options={cityList.map(c => lbl("districts", c))}
-            placeholder="Select city…" />
-        ) : (
-          <Input label={t("cp.s2.currentCity")} required
-            placeholder={t("cp.s2.currentCityPh")} value={d.currentCity}
-            onChange={e => set("currentCity", e.target.value)} />
-        )}
+        <Input
+          label={t("cp.s2.currentCity")}
+          value={d.currentCity}
+          onChange={(e) => set("currentCity", e.target.value)}
+          placeholder={t("cp.s2.currentCityPh")}
+        />
       </div>
 
+      {/* Birth City + Birth Time */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
         <Input
-          label={t("cp.s2.birthTime")}
-          type="time"
-          value={d.birthTime}
-          onChange={e => set("birthTime", e.target.value)}
+          label={t("cp.s2.birthCity")}
+          value={d.birthCity}
+          onChange={(e) => set("birthCity", e.target.value)}
+          placeholder={t("cp.s2.birthCityPh")}
         />
-        <Input label={t("cp.s2.pincode")} placeholder={t("cp.s2.pincodePh")} value={d.pincode}
-          onChange={e => set("pincode", e.target.value.replace(/\D/g, "").slice(0, 6))} />
+
+        <Input
+          type="time"
+          label={t("cp.s2.birthTime")}
+          value={d.birthTime}
+          onChange={(e) => set("birthTime", e.target.value)}
+        />
       </div>
 
+      {/* Pincode + Gotra */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s2.rashi")} value={d.rashi}
-          onChange={e => set("rashi", e.target.value)} options={rashiOptions} />
-        <Select label={t("cp.s2.nakshatra")} value={d.nakshatra}
-          onChange={e => set("nakshatra", e.target.value)} options={nakshatraOptions} />
+        <Input
+          label={t("cp.s2.pincode")}
+          value={d.pincode}
+          onChange={(e) => set("pincode", e.target.value)}
+          placeholder={t("cp.s2.pincodePh")}
+        />
+
+        <Input
+          label={t("cp.s2.gotra")}
+          value={d.gotra}
+          onChange={(e) => set("gotra", e.target.value)}
+          placeholder={t("cp.s2.gotraPh")}
+        />
       </div>
+
+      {/* Rashi + Nakshatra */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s2.gotra")} placeholder={t("cp.s2.gotraPh")} value={d.gotra}
-          onChange={e => set("gotra", e.target.value)} />
-        <Select label={t("cp.s2.manglik")} value={d.manglik}
-          onChange={e => set("manglik", e.target.value)} options={manglikOptions} />
+        <Select
+          label={t("cp.s2.rashi")}
+          value={d.rashi}
+          onChange={(e) => set("rashi", e.target.value)}
+          options={rashiOptions}
+        />
+         <Input
+          label={t("cp.s2.caste")}
+          required
+          placeholder={t("cp.s2.castePh")}
+          value={d.caste || ""}
+          onChange={(e) => set("caste", e.target.value)}
+        />
+
+        <Select
+          label={t("cp.s2.nakshatra")}
+          value={d.nakshatra}
+          onChange={(e) => set("nakshatra", e.target.value)}
+          options={nakshatraOptions}
+        />
+
+        <Select
+        label={t("cp.s2.manglik")}
+        value={d.manglik}
+        onChange={(e) => set("manglik", e.target.value)}
+        options={manglikOptions}
+      />
       </div>
+
+      
+
     </div>
   );
 }
 
+
+
 function Step3({ d, set, t }) {
-  const religionOptions           = t("cp.options.religion",   { returnObjects: true });
-  const casteNoBarOptions         = t("cp.options.casteNoBar", { returnObjects: true });
-  const casteOptions = t("cp.options.caste", { returnObjects: true });
-  const religiousPracticeOptions = t("cp.options.religiousPractice", { returnObjects: true });
+
+  const familyTypeOptions =
+    t("cp.options.familyType", { returnObjects: true }) || [];
+
+  const fatherOccupationOptions =
+    t("cp.options.fatherOccupation", { returnObjects: true }) || [];
+
+  const motherOccupationOptions =
+    t("cp.options.motherOccupation", { returnObjects: true }) || [];
+
+  const siblingsOptions =
+    t("cp.options.siblingsCount", { returnObjects: true }) || [];
 
   return (
     <div>
+
+      {/* Father */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s3.religion")} required value={d.religion} onChange={e => set("religion", e.target.value)}
-          options={religionOptions} />
-        <Select label={t("cp.s3.caste")} value={d.caste} onChange={e => set("caste", e.target.value)}
-          options={casteOptions} />
+        <Input
+          label={t("cp.s3.fatherName")}
+          placeholder={t("cp.s3.fatherNamePh")}
+          value={d.fatherName}
+          onChange={(e) => set("fatherName", e.target.value)}
+        />
+
+        <Select
+          label={t("cp.s3.fatherOccupation")}
+          value={d.fatherOccupation}
+          onChange={(e) => set("fatherOccupation", e.target.value)}
+          options={fatherOccupationOptions}
+        />
       </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s3.subCaste")} placeholder={t("cp.s3.subCastePh")} value={d.subCaste} onChange={e => set("subCaste", e.target.value)} />
-        <Select label={t("cp.s3.casteNoBar")} value={d.casteNoBar} onChange={e => set("casteNoBar", e.target.value)}
-          options={casteNoBarOptions} />
+        <Input
+          label={t("cp.s3.fatherVillage")}
+          placeholder={t("cp.s3.fatherVillagePh")}
+          value={d.fatherVillage}
+          onChange={(e) => set("fatherVillage", e.target.value)}
+        />
+
+        <Input
+          label={t("cp.s3.fatherRelativeSurname")}
+          placeholder={t("cp.s3.fatherRelativeSurnamePh")}
+          value={d.fatherRelativeSurname}
+          onChange={(e) => set("fatherRelativeSurname", e.target.value)}
+        />
       </div>
-      <Select label={t("cp.s3.religiousPractice")} value={d.religiousPractice} onChange={e => set("religiousPractice", e.target.value)}
-             options={religiousPracticeOptions}/>
-      <Input label={t("cp.s3.community")} placeholder={t("cp.s3.communityPh")} value={d.community} onChange={e => set("community", e.target.value)} />
+
+      {/* Mother */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Input
+          label={t("cp.s3.motherName")}
+          placeholder={t("cp.s3.motherNamePh")}
+          value={d.motherName}
+          onChange={(e) => set("motherName", e.target.value)}
+        />
+
+        <Select
+          label={t("cp.s3.motherOccupation")}
+          value={d.motherOccupation}
+          onChange={(e) => set("motherOccupation", e.target.value)}
+          options={motherOccupationOptions}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Input
+          label={t("cp.s3.motherVillage")}
+          placeholder={t("cp.s3.motherVillagePh")}
+          value={d.motherVillage}
+          onChange={(e) => set("motherVillage", e.target.value)}
+        />
+
+        <Input
+          label={t("cp.s3.motherRelativeSurname")}
+          placeholder={t("cp.s3.motherRelativeSurnamePh")}
+          value={d.motherRelativeSurname}
+          onChange={(e) => set("motherRelativeSurname", e.target.value)}
+        />
+      </div>
+
+      {/* Siblings */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Select
+          label={t("cp.s3.siblings")}
+          value={d.siblings}
+          onChange={(e) => set("siblings", e.target.value)}
+          options={siblingsOptions}
+        />
+
+        <Select
+          label={t("cp.s3.siblingsMarried")}
+          value={d.siblingsMarried}
+          onChange={(e) => set("siblingsMarried", e.target.value)}
+          options={[t("common.yes"), t("common.no")]}
+        />
+      </div>
+
+      {/* Family Type */}
+      <Select
+        label={t("cp.s3.familyType")}
+        value={d.familyType}
+        onChange={(e) => set("familyType", e.target.value)}
+        options={familyTypeOptions}
+      />
+
     </div>
   );
 }
 
 function Step4({ d, set, t }) {
-  const familyTypeOptions   = t("cp.options.familyType",   { returnObjects: true });
-  const familyValuesOptions = t("cp.options.familyValues", { returnObjects: true });
-  const familyStatusOptions = t("cp.options.familyStatus", { returnObjects: true });
-  const fatherOccupationOptions = t("cp.options.fatherOccupation", { returnObjects: true });
-  const motherOccupationOptions = t("cp.options.motherOccupation", { returnObjects: true });
-  const siblingsOptions         = t("cp.options.siblingsCount", { returnObjects: true });
 
-  
-const maharashtraDistricts =
-  LOCATION_DATA?.India?.districts?.Maharashtra || [];
+  const educationOptions =
+    t("cp.options.education", { returnObjects: true });
 
-const fatherTalukaOptions =
-  d.fatherDistrict
-    ? (LOCATION_DATA?.India?.talukas?.[d.fatherDistrict] || [])
-    : [];
+  const employmentTypeOptions =
+    t("cp.options.employmentType", { returnObjects: true });
 
-const motherTalukaOptions =
-  d.motherDistrict
-    ? (LOCATION_DATA?.India?.talukas?.[d.motherDistrict] || [])
-    : [];
-
-
+  const incomeOptions =
+    t("cp.options.income", { returnObjects: true });
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s4.fatherName")} placeholder={t("cp.s4.fatherNamePh")} value={d.fatherName} onChange={e => set("fatherName", e.target.value)} />
-        <Select label={t("cp.s4.fatherOccupation")} value={d.fatherOccupation} onChange={e => set("fatherOccupation", e.target.value)}
-          options={fatherOccupationOptions}/>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-         <Select label={t("cp.s4.fatherDistrict")} value={d.fatherDistrict} onChange={e => { set("fatherDistrict", e.target.value); set("fatherTaluka", ""); }} options={maharashtraDistricts} /> 
-         <Select label={t("cp.s4.fatherTaluka")} value={d.fatherTaluka} onChange={e => set("fatherTaluka", e.target.value)} options={fatherTalukaOptions} />
-      </div>  
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s4.fatherVillage")} placeholder={t("cp.s4.fatherVillagePh")} value={d.fatherVillage} onChange={e => set("fatherVillage", e.target.value)}/>
-        <Input label={t("cp.s4.fatherRelativeSurname")} placeholder={t("cp.s4.fatherRelativeSurnamePh")} value={d.fatherRelativeSurname} onChange={e => set("fatherRelativeSurname", e.target.value)}/>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s4.motherName")} placeholder={t("cp.s4.motherNamePh")} value={d.motherName} onChange={e => set("motherName", e.target.value)} />
-        <Select label={t("cp.s4.motherOccupation")} value={d.motherOccupation} onChange={e => set("motherOccupation", e.target.value)}
-          options={motherOccupationOptions} />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s4.motherDistrict")} value={d.motherDistrict} onChange={e => { set("motherDistrict", e.target.value); set("motherTaluka", ""); }} options={maharashtraDistricts} /> 
-        <Select label={t("cp.s4.motherTaluka")} value={d.motherTaluka} onChange={e => set("motherTaluka", e.target.value)} options={motherTalukaOptions} /> 
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5"> 
-        <Input label={t("cp.s4.motherVillage")} placeholder={t("cp.s4.motherVillagePh")} value={d.motherVillage} onChange={e => set("motherVillage", e.target.value)} /> 
-        <Input label={t("cp.s4.motherRelativeSurname")} placeholder={t("cp.s4.motherRelativeSurnamePh")} value={d.motherRelativeSurname} onChange={e => set("motherRelativeSurname", e.target.value)} /> 
-      </div>
-      
 
-     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-  <Select
-    label={t("cp.s4.siblings")}
-    value={d.siblings}
-    onChange={e => set("siblings", e.target.value)}
-    options={siblingsOptions}
-  />
+      {/* Education */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Select
+          label={t("cp.s4.education")}
+          required
+          value={d.education}
+          onChange={(e) => set("education", e.target.value)}
+          options={educationOptions}
+        />
 
-  <Select
-    label={t("cp.s4.siblingsMarried")}
-    value={d.siblingsMarried}
-    onChange={e => set("siblingsMarried", e.target.value)}
-    options={[
-    t("common.yes"),
-    t("common.no")
-]}
-  />
-</div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-5">
-        <Select label={t("cp.s4.familyType")} value={d.familyType} onChange={e => set("familyType", e.target.value)}
-          options={familyTypeOptions} />
-        <Select label={t("cp.s4.familyValues")} value={d.familyValues} onChange={e => set("familyValues", e.target.value)}
-          options={familyValuesOptions} />
-        <Select label={t("cp.s4.familyStatus")} value={d.familyStatus} onChange={e => set("familyStatus", e.target.value)}
-          options={familyStatusOptions} />
+        <Input
+          label={t("cp.s4.fieldOfStudy")}
+          placeholder={t("cp.s4.fieldOfStudyPh")}
+          value={d.fieldOfStudy}
+          onChange={(e) => set("fieldOfStudy", e.target.value)}
+        />
       </div>
-      <Input label={t("cp.s4.familyLocation")} placeholder={t("cp.s4.familyLocationPh")} value={d.familyLocation} onChange={e => set("familyLocation", e.target.value)} />
+
+      {/* Employment */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
+        <Select
+          label={t("cp.s4.employmentType")}
+          required
+          value={d.employmentType}
+          onChange={(e) => set("employmentType", e.target.value)}
+          options={employmentTypeOptions}
+        />
+
+        <Select
+          label={t("cp.s4.income")}
+          value={d.income}
+          onChange={(e) => set("income", e.target.value)}
+          options={incomeOptions}
+        />
+      </div>
+
+      {/* Work Location */}
+      <Input
+        label={t("cp.s4.workLocation")}
+        placeholder={t("cp.s4.workLocationPh")}
+        value={d.workLocation}
+        onChange={(e) => set("workLocation", e.target.value)}
+      />
+
     </div>
   );
 }
 
-function Step5({ d, set, t }) {
-  const educationOptions      = t("cp.options.education",      { returnObjects: true });
-  const employmentTypeOptions = t("cp.options.employmentType", { returnObjects: true });
-  const incomeOptions         = t("cp.options.income",         { returnObjects: true });
+function Step5({ d, set, toggleChip, t }) {
+
+  const dietOptions =
+    t("cp.options.diet", { returnObjects: true });
+
+  const smokingOptions =
+    t("cp.options.smoking", { returnObjects: true });
+
+  const drinkingOptions =
+    t("cp.options.drinking", { returnObjects: true });
+
+  const fitnessOptions =
+    t("cp.options.fitness", { returnObjects: true });
+
+  const hobbies =
+    t("cp.options.hobbies", { returnObjects: true });
 
   return (
     <div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s5.education")} required value={d.education} onChange={e => set("education", e.target.value)}
-          options={educationOptions} />
-        <Input label={t("cp.s5.fieldOfStudy")} placeholder={t("cp.s5.collegePh")} value={d.fieldOfStudy} onChange={e => set("fieldOfStudy", e.target.value)} />
+        <Select
+          label={t("cp.s5.diet")}
+          required
+          value={d.diet}
+          onChange={(e) => set("diet", e.target.value)}
+          options={dietOptions}
+        />
+
+        <Select
+          label={t("cp.s5.smoking")}
+          value={d.smoking}
+          onChange={(e) => set("smoking", e.target.value)}
+          options={smokingOptions}
+        />
       </div>
-      <Input label={t("cp.s5.college")} placeholder={t("cp.s5.fieldOfStudyPh")} value={d.college} onChange={e => set("college", e.target.value)} />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s5.employmentType")} required value={d.employmentType} onChange={e => set("employmentType", e.target.value)}
-          options={employmentTypeOptions} />
-        <Input label={t("cp.s5.occupation")} required placeholder={t("cp.s5.occupationPh")} value={d.occupation} onChange={e => set("occupation", e.target.value)} />
+        <Select
+          label={t("cp.s5.drinking")}
+          value={d.drinking}
+          onChange={(e) => set("drinking", e.target.value)}
+          options={drinkingOptions}
+        />
+
+        <Select
+          label={t("cp.s5.fitness")}
+          value={d.fitness}
+          onChange={(e) => set("fitness", e.target.value)}
+          options={fitnessOptions}
+        />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input label={t("cp.s5.company")} placeholder={t("cp.s5.companyPh")} value={d.company} onChange={e => set("company", e.target.value)} />
-        <Select label={t("cp.s5.income")} value={d.income} onChange={e => set("income", e.target.value)}
-          options={incomeOptions} />
-      </div>
-      <Input label={t("cp.s5.workLocation")} placeholder={t("cp.s5.workLocationPh")} value={d.workLocation} onChange={e => set("workLocation", e.target.value)} />
+
+      <Chips
+        label={t("cp.s5.hobbies")}
+        options={hobbies}
+        selected={d.hobbies}
+        onToggle={(v) => toggleChip("hobbies", v)}
+      />
+
     </div>
   );
 }
 
-function Step6({ d, set, toggleChip, t }) {
-  const dietOptions    = t("cp.options.diet",     { returnObjects: true });
-  const smokingOptions = t("cp.options.smoking",  { returnObjects: true });
-  const drinkingOptions= t("cp.options.drinking", { returnObjects: true });
-  const fitnessOptions = t("cp.options.fitness",  { returnObjects: true });
-  const vehicleOptions = t("cp.options.vehicle",  { returnObjects: true });
-  const propertyOptions= t("cp.options.property", { returnObjects: true });
-  const languages      = t("cp.options.languages", { returnObjects: true });
-  const hobbies        = t("cp.options.hobbies",   { returnObjects: true });
-
-  return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s6.diet")} required value={d.diet} onChange={e => set("diet", e.target.value)}
-          options={dietOptions} />
-        <Select label={t("cp.s6.smoking")} value={d.smoking} onChange={e => set("smoking", e.target.value)}
-          options={smokingOptions} />
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s6.drinking")} value={d.drinking} onChange={e => set("drinking", e.target.value)}
-          options={drinkingOptions} />
-        <Select label={t("cp.s6.fitness")} value={d.fitness} onChange={e => set("fitness", e.target.value)}
-          options={fitnessOptions} />
-      </div>
-      <Chips label={t("cp.s6.languages")} options={languages} selected={d.languages} onToggle={v => toggleChip("languages", v)} />
-      <Chips label={t("cp.s6.hobbies")} options={hobbies} selected={d.hobbies} onToggle={v => toggleChip("hobbies", v)} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s6.vehicle")} value={d.vehicle} onChange={e => set("vehicle", e.target.value)}
-          options={vehicleOptions} />
-        <Select label={t("cp.s6.property")} value={d.property} onChange={e => set("property", e.target.value)}
-          options={propertyOptions} />
-      </div>
-    </div>
-  );
-}
-
-function Step7({ d, set, t }) {
+function Step6({ d, set, t }) {
   const { i18n } = useTranslation();
-  const partnerMaritalStatusOptions = t("cp.options.partnerMaritalStatus", { returnObjects: true });
-  const partnerReligionOptions      = t("cp.options.partnerReligion",      { returnObjects: true });
-  const partnerCasteOptions         = t("cp.options.partnerCaste",         { returnObjects: true });
-  const partnerEducationOptions     = t("cp.options.partnerEducation",     { returnObjects: true });
-  const partnerIncomeOptions        = t("cp.options.partnerIncome",        { returnObjects: true });
-  const partnerLocationOptions      = t("cp.options.partnerLocation",      { returnObjects: true });
-  const partnerDietOptions          = t("cp.options.partnerDiet",          { returnObjects: true });
-  const partnerManglikOptions       = t("cp.options.partnerManglik",       { returnObjects: true });
+
+  const partnerMaritalStatusOptions =
+    t("cp.options.partnerMaritalStatus", { returnObjects: true });
+
+  const partnerEducationOptions =
+    t("cp.options.partnerEducation", { returnObjects: true });
+
+  const partnerIncomeOptions =
+    t("cp.options.partnerIncome", { returnObjects: true });
 
   const toMarathiNumber = (num) => {
     const marathiDigits = ["०","१","२","३","४","५","६","७","८","९"];
@@ -1583,85 +1800,124 @@ function Step7({ d, set, t }) {
   const yearLabel = t("common.years");
   const isMarathi = i18n.language === "mr";
 
+  // ── Age options ────────────────────────────────────────────────────────
   const ageOptions = Array.from({ length: 33 }, (_, i) => {
     const age = 18 + i;
     const displayAge = isMarathi ? toMarathiNumber(age) : age;
     return `${displayAge} ${yearLabel}`;
   });
 
+  // Max age options — disable anything <= min age
+  const maxAgeOptions = ageOptions.map((opt, i) => {
+    const age = 18 + i;
+    const minAge = d.partnerAgeMin ? parseInt(d.partnerAgeMin) : null;
+    return {
+      value: opt,
+      label: opt,
+      disabled: minAge !== null && age <= minAge,
+    };
+  });
+
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s7.partnerAgeMin")} value={d.partnerAgeMin} onChange={e => set("partnerAgeMin", e.target.value)} options={ageOptions}/>         
-        <Select label={t("cp.s7.partnerAgeMax")} value={d.partnerAgeMax} onChange={e => set("partnerAgeMax", e.target.value)} options={ageOptions}/>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Input
-  label={t("cp.s7.partnerHeightMin")}
-  placeholder="5'9"
-  value={d.partnerHeightMin}
-  onChange={e => {
-    let value = e.target.value.replace(/[^\d]/g, "");
 
-    // Auto format like 5'9
-    if (value.length >= 2) {
-      value = `${value[0]}'${value.slice(1, 2)}`;
-    }
-
-    set("partnerHeightMin", value);
-  }}
-  maxLength={3}
-/>
-
-<Input
-  label={t("cp.s7.partnerHeightMax")}
-  placeholder="5'9"
-  value={d.partnerHeightMax}
-  onChange={e => {
-    let value = e.target.value.replace(/[^\d]/g, "");
-
-    // Auto format like 5'9
-    if (value.length >= 2) {
-      value = `${value[0]}'${value.slice(1, 2)}`;
-    }
-
-    set("partnerHeightMax", value);
-  }}
-  maxLength={3}
-/>
-      </div>
+      {/* Age */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s7.partnerMaritalStatus")} value={d.partnerMaritalStatus} onChange={e => set("partnerMaritalStatus", e.target.value)}
-          options={partnerMaritalStatusOptions} />
-        <Select label={t("cp.s7.partnerReligion")} value={d.partnerReligion} onChange={e => set("partnerReligion", e.target.value)}
-          options={partnerReligionOptions} />
+        <Select
+          label={t("cp.s6.partnerAgeMin")}
+          value={d.partnerAgeMin}
+          onChange={(e) => {
+            const val = e.target.value;
+            set("partnerAgeMin", val);
+            // Clear max if min >= max
+            if (d.partnerAgeMax && val >= d.partnerAgeMax) {
+              set("partnerAgeMax", "");
+            }
+          }}
+          options={ageOptions}
+        />
+
+        <Select
+          label={t("cp.s6.partnerAgeMax")}
+          value={d.partnerAgeMax}
+          onChange={(e) => set("partnerAgeMax", e.target.value)}
+          options={maxAgeOptions}
+        />
       </div>
+
+      {/* Height */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s7.partnerCaste")} value={d.partnerCaste} onChange={e => set("partnerCaste", e.target.value)}
-          options={partnerCasteOptions} />
-        <Select label={t("cp.s7.partnerEducation")} value={d.partnerEducation} onChange={e => set("partnerEducation", e.target.value)}
-          options={partnerEducationOptions} />
+        <HeightPicker
+          label={t("cp.s6.partnerHeightMin")}
+          value={d.partnerHeightMin}
+          onChange={(val) => {
+            set("partnerHeightMin", val);
+            if (d.partnerHeightMax) {
+              const [minFt, minIn] = val.split("-").map(Number);
+              const [maxFt, maxIn] = d.partnerHeightMax.split("-").map(Number);
+              if (minFt > maxFt || (minFt === maxFt && minIn >= maxIn)) {
+                set("partnerHeightMax", "");
+              }
+            }
+          }}
+        />
+
+        <HeightPicker
+          label={t("cp.s6.partnerHeightMax")}
+          value={d.partnerHeightMax}
+          minValue={d.partnerHeightMin}
+          onChange={(val) => set("partnerHeightMax", val)}
+        />
       </div>
-      <Input label={t("cp.s7.preferredSurnames")} placeholder={t("cp.s7.preferredSurnamesPh")} value={d.preferredSurnames} onChange={e => set("preferredSurnames", e.target.value)}/>
+
+      {/* Marital Status + Education */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s7.partnerIncome")} value={d.partnerIncome} onChange={e => set("partnerIncome", e.target.value)}
-          options={partnerIncomeOptions} />
-        <Select label={t("cp.s7.partnerLocation")} value={d.partnerLocation} onChange={e => set("partnerLocation", e.target.value)}
-          options={partnerLocationOptions} />
+        <Select
+          label={t("cp.s6.partnerMaritalStatus")}
+          value={d.partnerMaritalStatus}
+          onChange={(e) => set("partnerMaritalStatus", e.target.value)}
+          options={partnerMaritalStatusOptions}
+        />
+
+        <Select
+          label={t("cp.s6.partnerEducation")}
+          value={d.partnerEducation}
+          onChange={(e) => set("partnerEducation", e.target.value)}
+          options={partnerEducationOptions}
+        />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5">
-        <Select label={t("cp.s7.partnerDiet")} value={d.partnerDiet} onChange={e => set("partnerDiet", e.target.value)}
-          options={partnerDietOptions} />
-        <Select label={t("cp.s7.partnerManglik")} value={d.partnerManglik} onChange={e => set("partnerManglik", e.target.value)}
-          options={partnerManglikOptions} />
-      </div>
-      <Textarea label={t("cp.s7.partnerDesc")} placeholder={t("cp.s7.partnerDescPh")} value={d.partnerDesc} onChange={e => set("partnerDesc", e.target.value)} rows={4} />
+
+      {/* Preferred Surname */}
+      <Input
+        label={t("cp.s6.preferredSurnames")}
+        placeholder={t("cp.s6.preferredSurnamesPh")}
+        value={d.preferredSurname}
+        onChange={(e) => set("preferredSurname", e.target.value)}
+      />
+
+      {/* Income */}
+      <Select
+        label={t("cp.s6.partnerIncome")}
+        value={d.partnerIncome}
+        onChange={(e) => set("partnerIncome", e.target.value)}
+        options={partnerIncomeOptions}
+      />
+
+      {/* Description */}
+      <Textarea
+        label={t("cp.s6.partnerDesc")}
+        placeholder={t("cp.s6.partnerDescPh")}
+        value={d.partnerDesc}
+        onChange={(e) => set("partnerDesc", e.target.value)}
+        rows={4}
+      />
+
     </div>
   );
 }
 
 // ✅ onPhotoSelect prop added — actual file parent ला pass करण्यासाठी
-function Step8({ d, set, t, onPhotoSelect }) {
+function Step7({ d, set, t, onPhotoSelect }) {
   const [verifying, setVerifying] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState(null);
 
@@ -1680,9 +1936,9 @@ function Step8({ d, set, t, onPhotoSelect }) {
     <div>
       {/* ── PROFILE PHOTO ── */}
       <div className="mb-7">
-        <Label>{t("cp.s8.profilePhoto")}</Label>
+        <Label>{t("cp.s7.profilePhoto")}</Label>
         <p className="text-[0.78rem] text-[#9a8c7a] mb-4">
-          {t("cp.s8.photoDesc")}
+          {t("cp.s7.photoDesc")}
         </p>
         <div className="flex flex-col items-center gap-4">
           {photo ? (
@@ -1706,7 +1962,7 @@ function Step8({ d, set, t, onPhotoSelect }) {
             </div>
           )}
           <label className="flex items-center gap-2 px-5 py-2 rounded-xl border border-[#e8c98a] bg-[#fdf6ec] text-[#c2852a] text-[0.8rem] font-semibold cursor-pointer hover:bg-[#f5e8cc] transition-colors">
-            <span>{photo ? t("cp.s8.changePhoto") : t("cp.s8.uploadPhoto")}</span>
+            <span>{photo ? t("cp.s7.changePhoto") : t("cp.s7.uploadPhoto")}</span>
             <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
           </label>
         </div>
@@ -1721,12 +1977,12 @@ function Step8({ d, set, t, onPhotoSelect }) {
 const initData = {
   firstName: "", lastName: "", dob: "", gender: "", maritalStatus: "", profileFor: "",
   height: "", weight: "", bodyType: "", complexion: "", mobile: "", about: "",
-  motherTongue: "", nationality: "", currentCity: "", currentState: "", country: "", district: "",  taluka: "",
+  currentCity: "", currentState: "", country: "", district: "",  taluka: "",
   birthCity: "", birthTime: "", rashi: "", nakshatra: "", gotra: "", manglik: "",pincode: "",
-  religion: "", caste: "", subCaste: "", casteNoBar: "", religiousPractice: "", community: "",
-  fatherName: "", fatherOccupation: "", motherName: "", motherOccupation: "",
-  brothers: "", brothersMarried: "", sisters: "", sistersMarried: "",
-  familyType: "", familyValues: "", familyStatus: "", familyLocation: "",
+  caste: "",
+  fatherName: "", fatherOccupation: "", fatherVillage: "", fatherRelativeSurname: "",
+  motherName: "", motherOccupation: "", motherVillage: "",motherRelativeSurname: "",
+  familyType: "",
   education: "", fieldOfStudy: "", college: "",
   employmentType: "", occupation: "", company: "", income: "", workLocation: "",
   diet: "", smoking: "", drinking: "", fitness: "",
@@ -1869,7 +2125,6 @@ const [data, setData] = useState({ ...initData, ...profileData });
     t("cp.stepInfo.5"),
     t("cp.stepInfo.6"),
     t("cp.stepInfo.7"),
-    t("cp.stepInfo.8"),
   ];
 
   const card = (
@@ -1992,10 +2247,9 @@ const [data, setData] = useState({ ...initData, ...profileData });
           {step === 2 && <Step2 d={data} set={set} t={t} />}
           {step === 3 && <Step3 d={data} set={set} t={t} />}
           {step === 4 && <Step4 d={data} set={set} t={t} />}
-          {step === 5 && <Step5 d={data} set={set} t={t} />}
-          {step === 6 && <Step6 d={data} set={set} toggleChip={toggleChip} t={t} />}
-          {step === 7 && <Step7 d={data} set={set} t={t} />}
-          {step === 8 && <Step8 d={data} set={set} t={t} onPhotoSelect={setPhotoFile} />}
+          {step === 5 && <Step5 d={data} set={set} toggleChip={toggleChip} t={t} />}
+          {step === 6 && <Step6 d={data} set={set} t={t} />}
+          {step === 7 && <Step7 d={data} set={set} t={t} onPhotoSelect={setPhotoFile} />}
         </div>
       </div>
 

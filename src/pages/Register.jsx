@@ -12,6 +12,7 @@ function Register() {
   const [focused, setFocused] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mobileError, setMobileError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -219,10 +220,36 @@ function Register() {
                   {t("register.mobileLabel")}
                 </label>
                 <input
-                  type="text"
-                  name="mobileNumber"             
+                  type="tel"
+                  name="mobileNumber"
                   value={formData.mobileNumber}
-                  onChange={handleChange}
+                  onChange={(e) => {
+
+                    // only numbers
+                    const value =
+                      e.target.value.replace(/\D/g, "");
+
+                    // max 10 digits
+                    if (value.length <= 10) {
+
+                      setFormData({
+                        ...formData,
+                        mobileNumber: value,
+                      });
+
+                      // validation
+                      if (
+                        value.length > 0 &&
+                        value.length < 10
+                      ) {
+                        setMobileError(
+                          t("register.mobileInvalid")
+                        );
+                      } else {
+                        setMobileError("");
+                      }
+                    }
+                  }}
                   placeholder={t("register.mobilePlaceholder")}
                   className={inputClass("mobile")}
                   onFocus={() => setFocused("mobile")}

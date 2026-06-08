@@ -87,23 +87,66 @@ import { useProfile } from "../context/ProfileContext";
 import { useTranslation } from "react-i18next";
 
 const REQUIRED_FIELDS = [
-  "firstName", "lastName", "dob", "gender", "maritalStatus", "profileFor",
-  "height", "weight", "motherTongue", "religion", "caste", "community",
-  "currentCity", "currentState",
-  "fatherName", "motherName", "familyType", "familyValues",
-  "education", "occupation", "income",
-  "diet", "smoking", "drinking",
-  "partnerAgeMin", "partnerAgeMax", "partnerReligion", "partnerEducation",
+  // Step 1
+  "firstName",
+  "lastName",
+  "dob",
+  "gender",
+  "maritalStatus",
+  "profileFor",
+  "height",
+  "weight",
+
+  // Step 2
+  "currentState",
+  "district",
+  "taluka",
+  "currentCity",
+  "caste",
+
+  // Step 3
+  "fatherName",
+  "motherName",
+  "familyType",
+
+  // Step 4
+  "education",
+  "employmentType",
+
+  // Step 5
+  "diet",
+
+  // Step 6
+  "partnerAgeMin",
+  "partnerAgeMax",
+  "partnerEducation",
+
+  // Step 7
+  "photos",
 ];
 
 function calcCompletion(data) {
   if (!data) return 0;
-  const filled = REQUIRED_FIELDS.filter(key => {
-    const val = data[key];
-    if (Array.isArray(val)) return val.length > 0;
-    return val !== "" && val !== null && val !== undefined;
+
+  let filled = 0;
+
+  REQUIRED_FIELDS.forEach((field) => {
+    const value = data[field];
+
+    if (Array.isArray(value)) {
+      if (value.length > 0) filled++;
+    } else if (
+      value !== undefined &&
+      value !== null &&
+      String(value).trim() !== ""
+    ) {
+      filled++;
+    }
   });
-  return Math.round((filled.length / REQUIRED_FIELDS.length) * 100);
+
+  return Math.round(
+    (filled / REQUIRED_FIELDS.length) * 100
+  );
 }
 
 export default function ProfileBanner({ onOpen, onDismiss }) {

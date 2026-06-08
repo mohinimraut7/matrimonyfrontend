@@ -392,6 +392,17 @@ const AVATAR_BG = [
   ["#d4cac9", "#b8a6a6"], ["#cec8bf", "#b2a99d"], ["#d4cfc2", "#b8b0a0"],
 ];
 
+function formatHeight(raw) {
+  if (!raw) return "";
+  const parts = String(raw).split("-");
+  const ft = parts[0];
+  const inch = parts[1];
+  if (!ft) return "";
+  // Only show inches if it actually exists and is not empty
+  if (inch !== undefined && inch !== "") return `${ft}'${inch}`;
+  return `${ft}`;
+}
+
 function AvatarPlaceholder({ name }) {
   const initials = name?.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
   const [g1, g2] = AVATAR_BG[initials?.charCodeAt(0) % AVATAR_BG.length];
@@ -766,7 +777,7 @@ function ProfileCard({ profile: p, onView, connectLabel }) {
             </h3>
             <p className="text-[#686f7c] text-[0.71rem] mt-0.5 font-normal">
               {p.age ? `${p.age} yrs` : "Age not specified"}
-              {p.height ? ` · ${p.height}` : ""}
+              {p.height ? ` · ${formatHeight(p.height)}` : ""}
             </p>
           </div>
         </div>
