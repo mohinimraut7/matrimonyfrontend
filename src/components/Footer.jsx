@@ -55,7 +55,7 @@ export default function Footer() {
             <li><Link to="/matches" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.browseMatches")}</Link></li>
             <li><Link to="/shortlist" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.shortlist")}</Link></li>
             <li><Link to="/interests" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.interests")}</Link></li>
-            <li><Link to="/kundali" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.kundali")}</Link></li>
+            {/* <li><Link to="/kundali" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.kundali")}</Link></li> */}
             <li><Link to="/profile" className="text-gray-400 hover:text-[#c2852a] transition-colors">{t("footer.links.myProfile")}</Link></li>
           </ul>
         </div>

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import HomeCards from "../components/HomeCards";
 import Review from "../components/Review";
-import KundaliSection from "../components/KundaliSection";
+// import KundaliSection from "../components/KundaliSection";
 import FaqSection from "../components/FaqSection";
 import ProfileBanner from "../components/ProfileBanner";
 import CompleteProfile from "./CompleteProfile";
@@ -118,7 +118,7 @@ export default function Home() {
         </div>
       </div>
 
-      <KundaliSection />
+      {/* <KundaliSection /> */}
       <HomeCards />
       <Review />
       <FaqSection />

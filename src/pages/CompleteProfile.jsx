@@ -1544,6 +1544,8 @@ function Step2({ d, set, t }) {
 
 function Step3({ d, set, t }) {
 
+   
+
   const familyTypeOptions =
     t("cp.options.familyType", { returnObjects: true }) || [];
 
@@ -1982,7 +1984,7 @@ const initData = {
   caste: "",
   fatherName: "", fatherOccupation: "", fatherVillage: "", fatherRelativeSurname: "",
   motherName: "", motherOccupation: "", motherVillage: "",motherRelativeSurname: "",
-  familyType: "",
+  familyType: "",siblings: "", siblingsMarried: "",
   education: "", fieldOfStudy: "", college: "",
   employmentType: "", occupation: "", company: "", income: "", workLocation: "",
   diet: "", smoking: "", drinking: "", fitness: "",

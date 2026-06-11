@@ -49,7 +49,7 @@
 
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import ProtectedRoute from "./ProtectedRoute"; // ✅ import
+import ProtectedRoute from "./ProtectedRoute"
 
 import Home from "../pages/Home";
 import About from "../pages/About";
@@ -61,7 +61,7 @@ import ViewProfile from "../pages/ViewProfile";
 import Shortlist from "../pages/Shortlist";
 import Interests from "../pages/Interests";
 // import Messages from "../pages/Messages";
-import KundaliMatching from "../pages/KundaliMatching";
+// import KundaliMatching from "../pages/KundaliMatching";
 import CompleteProfile from "../pages/CompleteProfile";
 
 
@@ -93,7 +93,7 @@ export default function AppRoutes() {
         {/* <Route path="/chats" element={<Messages />} />
         <Route path="/chats/:id" element={<Messages />} /> */}
 
-        <Route path="/kundali" element={<KundaliMatching />} />
+        {/* <Route path="/kundali" element={<KundaliMatching />} /> */}
         <Route path="/complete-profile" element={<CompleteProfile />} />
 
       </Route>

@@ -114,27 +114,27 @@
     ]
   },
   "faq": {
-    "title": "Frequently Asked Questions",
-    "subtitle": "Everything you need to know about finding your perfect match.",
-    "items": [
-      {
-        "q": "Is this matrimony platform free to use?",
-        "a": "Yes. You can create a profile, browse matches, and use basic features for free. Premium features unlock advanced filters and unlimited interactions."
-      },
-      {
-        "q": "How does Kundali matching work?",
-        "a": "We use the traditional Ashtakoot (36-point) Gun Milan system to evaluate compatibility based on moon sign, nakshatra, and doshas."
-      },
-      {
-        "q": "Is my personal information safe?",
-        "a": "Absolutely. Your data is encrypted and never shared without your consent. Privacy controls allow you to manage visibility at all times."
-      },
-      {
-        "q": "Do you verify profiles?",
-        "a": "We use multiple verification to reduce fake profiles."
-      }
-    ]
-  },
+  "title": "Frequently Asked Questions",
+  "subtitle": "Everything you need to know about finding your perfect match.",
+  "items": [
+    {
+      "q": "Is this matrimony platform free to use?",
+      "a": "Yes. You can create a profile, browse matches, and use basic features for free. Premium features unlock advanced filters and unlimited interactions."
+    },
+    {
+      "q": "How do I create my profile?",
+      "a": "Simply sign up with your basic details, complete your profile by adding personal and family information, upload a photo, and start exploring suitable matches."
+    },
+    {
+      "q": "Can I edit my profile after registration?",
+      "a": "Yes. You can update your profile details, preferences, photos, and other information anytime from your account settings."
+    },
+    {
+      "q": "Can I shortlist profiles for later?",
+      "a": "Yes. You can add profiles to your shortlist and access them anytime from your account."
+    }
+  ]
+},
   "footer": {
     "brandFirst": "MAJHA",
     "brandSecond": "JODIDAR",
@@ -478,7 +478,7 @@
       "motherVillage": "Mother Village",
       "motherRelativeSurname": "Mother Relative Surnames",
       "siblings": "Siblings",
-      "siblingsMarried": "Siblings Married",
+      "married": "Siblings Married",
       "familyType": "Family Type",
       "familyValues": "Family Values",
       "familyStatus": "Family Status",
